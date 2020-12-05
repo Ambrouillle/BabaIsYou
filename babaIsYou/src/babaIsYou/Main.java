@@ -21,6 +21,7 @@ public class Main {
         Element rock5 = factory.create(ElementEnum.Rock);
         
         Element wall = factory.create(ElementEnum.Wall);
+        Element wall2 = factory.create(ElementEnum.Wall);
         
         level.addPropInMap(PropertyEnum.Push, rock.getElemID()); //ajout de la property rosck is push sur la map
         level.addPropInMap(PropertyEnum.You, ElementEnum.Wall.getElemID()); //ajout de la property wall is you sur la map
@@ -55,7 +56,10 @@ public class Main {
         System.out.println("rock3, x: "+ rock3.getx()+", y: "+rock3.gety() );
         System.out.println("rock4, x: "+ rock4.getx()+", y: "+rock4.gety() );
         System.out.println("rock5, x: "+ rock5.getx()+", y: "+rock5.gety() );
-        //System.out.println(factory.elementHashMap);
+        System.out.println(factory.elementHashMap);
+        level.removeEntityfromEveryWhere(factory, wall);
+        System.out.println(factory.elementHashMap);
+        System.out.println(level.propertyHashMap.get(wall.getElemID()));
     }
 
 }
