@@ -8,6 +8,18 @@ import babaIsYou.entity.Text;
 import babaIsYou.entity.entityEnum.DirectionEnum;
 import babaIsYou.entity.entityEnum.ElementEnum;
 import babaIsYou.entity.entityEnum.PropertyEnum;
+import babaIsYou.Visual;
+
+import java.awt.Color;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import fr.umlv.zen5.Application;
+import fr.umlv.zen5.ApplicationContext;
+import fr.umlv.zen5.Event;
+import fr.umlv.zen5.ScreenInfo;
+import fr.umlv.zen5.Event.Action;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,42 +32,20 @@ public class Main {
         Element rock4 = factory.create(ElementEnum.Rock);
         Element rock5 = factory.create(ElementEnum.Rock);
         
-        Element wall = factory.create(ElementEnum.Wall);
-        
         level.addPropInMap(PropertyEnum.Push, rock.getElemID()); //ajout de la property rosck is push sur la map
-        level.addPropInMap(PropertyEnum.You, ElementEnum.Wall.getElemID()); //ajout de la property wall is you sur la map
         System.out.println(level.propertyHashMap);
-        
-        level.addEntityInCell(wall,0,3);
-        level.addEntityInCell(rock,1,3); 	//rock ajouter a la cell[1][3]
-        level.addEntityInCell(rock2,2,3); 
-        level.addEntityInCell(rock3,3,3); 
-        level.addEntityInCell(rock4,4,3); 
-        level.addEntityInCell(rock5,1,4); 
-        level.addPropInMap(PropertyEnum.Push, rock.getElemID() ); // ajout une deuxieme fois de la meme prop sur rock --> no pb
-        System.out.println("rock is push ? "+ rock.isPush()); // rock est bien push
+        level.addEntityInCell(factory.create(ElementEnum.Baba), 1, 1);
+        level.addEntityInCell(factory.create(ElementEnum.Flag), 2, 1);
+        level.addEntityInCell(factory.create(ElementEnum.Wall), 3, 1);
+        level.addEntityInCell(factory.create(ElementEnum.Water), 1, 2);
+        level.addEntityInCell(factory.create(ElementEnum.Skull), 2, 2);
+        level.addEntityInCell(factory.create(ElementEnum.Lava), 3, 2);
+        level.addEntityInCell(factory.create(ElementEnum.Rock), 2, 3);
 
-        System.out.println("wall, x"+wall.getx()+" , y :"+wall.gety());
-        System.out.println("rock, x: "+ rock.getx()+", y: "+rock.gety() );
-        System.out.println("rock2, x: "+ rock2.getx()+", y: "+rock2.gety() );
-        System.out.println("rock3, x: "+ rock3.getx()+", y: "+rock3.gety() );
-        System.out.println("rock4, x: "+ rock4.getx()+", y: "+rock4.gety() );
-        System.out.println("rock5, x: "+ rock5.getx()+", y: "+rock5.gety() );
-        
-        System.out.println("moove in action");
-        //level.moove(rock,DirectionEnum.DOWN);
-      
-        
-        System.out.println(level.mooveProp(factory,PropertyEnum.You ,DirectionEnum.RIGHT));
-
-        
-        System.out.println("wall, x"+wall.getx()+" , y :"+wall.gety());
-        System.out.println("rock, x: "+ rock.getx()+", y: "+rock.gety() );
-        System.out.println("rock2, x: "+ rock2.getx()+", y: "+rock2.gety() );
-        System.out.println("rock3, x: "+ rock3.getx()+", y: "+rock3.gety() );
-        System.out.println("rock4, x: "+ rock4.getx()+", y: "+rock4.gety() );
-        System.out.println("rock5, x: "+ rock5.getx()+", y: "+rock5.gety() );
-        //System.out.println(factory.elementHashMap);
+        Application.run(Color.BLACK, context -> {
+            GameArea game = new GameArea(context, level);
+            game.run();
+        });
     }
 
 }
