@@ -8,18 +8,9 @@ import babaIsYou.entity.Text;
 import babaIsYou.entity.entityEnum.DirectionEnum;
 import babaIsYou.entity.entityEnum.ElementEnum;
 import babaIsYou.entity.entityEnum.PropertyEnum;
-import babaIsYou.Visual;
 
-import java.awt.Color;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-
-import fr.umlv.zen5.Application;
-import fr.umlv.zen5.ApplicationContext;
-import fr.umlv.zen5.Event;
-import fr.umlv.zen5.ScreenInfo;
-import fr.umlv.zen5.Event.Action;
+import fr.umlv.zen5.*;
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,15 +23,21 @@ public class Main {
         Element rock4 = factory.create(ElementEnum.Rock);
         Element rock5 = factory.create(ElementEnum.Rock);
         
+        Element wall = factory.create(ElementEnum.Wall);
+        
         level.addPropInMap(PropertyEnum.Push, rock.getElemID()); //ajout de la property rosck is push sur la map
+        level.addPropInMap(PropertyEnum.You, ElementEnum.Wall.getElemID()); //ajout de la property wall is you sur la map
         System.out.println(level.propertyHashMap);
-        level.addEntityInCell(factory.create(ElementEnum.Baba), 1, 1);
-        level.addEntityInCell(factory.create(ElementEnum.Flag), 2, 1);
-        level.addEntityInCell(factory.create(ElementEnum.Wall), 3, 1);
-        level.addEntityInCell(factory.create(ElementEnum.Water), 1, 2);
-        level.addEntityInCell(factory.create(ElementEnum.Skull), 2, 2);
-        level.addEntityInCell(factory.create(ElementEnum.Lava), 3, 2);
-        level.addEntityInCell(factory.create(ElementEnum.Rock), 2, 3);
+        
+        level.addEntityInCell(wall,0,3);
+        level.addEntityInCell(rock,1,3); 	//rock ajouter a la cell[1][3]
+        level.addEntityInCell(rock2,2,3); 
+        level.addEntityInCell(rock3,3,3); 
+        level.addEntityInCell(rock4,4,3); 
+        level.addEntityInCell(rock5,1,4); 
+        level.addPropInMap(PropertyEnum.Push, rock.getElemID() ); // ajout une deuxieme fois de la meme prop sur rock --> no pb
+        
+        System.out.println(level.mooveProp(factory,PropertyEnum.You ,DirectionEnum.RIGHT));
 
         Application.run(Color.BLACK, context -> {
             GameArea game = new GameArea(context, level);
