@@ -2,9 +2,14 @@ package babaIsYou;
 
 import java.util.ArrayList;
 
+
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import babaIsYou.entity.Element;
 import babaIsYou.entity.Entity;
+import babaIsYou.entity.EntityFactory;
 import babaIsYou.entity.Property;
 import babaIsYou.entity.entityEnum.DirectionEnum;
 import babaIsYou.entity.entityEnum.PropertyEnum;
@@ -113,8 +118,8 @@ public class Level {
 	 * Check if the entity can be push in the Cell[x][y]
 	 * @param x
 	 * @param y
-	 * @param e
-	 * @param d
+	 * @param entity
+	 * @param direction
 	 * @return
 	 */
 	public boolean canEnter( int x,int y, Entity entity, DirectionEnum direction) {
@@ -137,6 +142,55 @@ public class Level {
 			return false;
 		//if(isInTheLevel(entity,direction) && !(isNextStop(entity,direction))) {			
 			return this.plateau[x][y].enter(entity, direction);
+	}
+	/**
+	 * 
+	 * @param push
+	 * @return the idElem of the object according to the prop
+	 */
+	public Object getElemnwithProp(PropertyEnum prop) {
+		for (Map.Entry mapentry : propertyHashMap.entrySet()) {
+	           if(((ArrayList<PropertyEnum>) mapentry.getValue()).contains(prop)) {
+	        	   return mapentry.getKey();
+	           }
+	        }
+		return null;
+		}
+		
+	
+	
+	public boolean mooveProp(EntityFactory factory,PropertyEnum prop,DirectionEnum direction) {
+		Integer idElem = (Integer) getElemnwithProp(prop);
+		if(prop != null) {
+			ArrayList<Element> list = factory.elementHashMap.get(idElem);
+			for(Element el : list) {
+				moove(el,direction);
+			}
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	public void removeEntityfromEveryWhere(EntityFactory factory, Entity ent) {
+		if(ent instanceof  Element) {
+			//remove ent from the factory
+			if(factory.elementHashMap.containsKey(((Element) ent).getElemID())) {
+				ArrayList list = factory.elementHashMap.get(((Element) ent).getElemID());
+				if(list.size() == 1) {
+					//check if there is a prop associed and remove it from level.propertyHashMap
+					if(this.propertyHashMap.containsKey(((Element) ent).getElemID())) {
+						this.propertyHashMap.remove(((Element) ent).getElemID()) ; 
+					}
+				}
+				list.remove(ent);
+				factory.elementHashMap.put(((Element) ent).getElemID(), list);
+			}
+			//remove ent from cell
+			removeEntityInCell(ent);
+			
+		}
 	}
 
 	

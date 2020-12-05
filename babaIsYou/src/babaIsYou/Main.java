@@ -20,9 +20,13 @@ public class Main {
         Element rock4 = factory.create(ElementEnum.Rock);
         Element rock5 = factory.create(ElementEnum.Rock);
         
+        Element wall = factory.create(ElementEnum.Wall);
+        
         level.addPropInMap(PropertyEnum.Push, rock.getElemID()); //ajout de la property rosck is push sur la map
+        level.addPropInMap(PropertyEnum.You, ElementEnum.Wall.getElemID()); //ajout de la property wall is you sur la map
         System.out.println(level.propertyHashMap);
         
+        level.addEntityInCell(wall,0,3);
         level.addEntityInCell(rock,1,3); 	//rock ajouter a la cell[1][3]
         level.addEntityInCell(rock2,2,3); 
         level.addEntityInCell(rock3,3,3); 
@@ -31,6 +35,7 @@ public class Main {
         level.addPropInMap(PropertyEnum.Push, rock.getElemID() ); // ajout une deuxieme fois de la meme prop sur rock --> no pb
         System.out.println("rock is push ? "+ rock.isPush()); // rock est bien push
 
+        System.out.println("wall, x"+wall.getx()+" , y :"+wall.gety());
         System.out.println("rock, x: "+ rock.getx()+", y: "+rock.gety() );
         System.out.println("rock2, x: "+ rock2.getx()+", y: "+rock2.gety() );
         System.out.println("rock3, x: "+ rock3.getx()+", y: "+rock3.gety() );
@@ -38,15 +43,19 @@ public class Main {
         System.out.println("rock5, x: "+ rock5.getx()+", y: "+rock5.gety() );
         
         System.out.println("moove in action");
-        level.moove(rock,DirectionEnum.DOWN);
-        level.moove(rock,DirectionEnum.DOWN);
+        //level.moove(rock,DirectionEnum.DOWN);
+      
         
+        System.out.println(level.mooveProp(factory,PropertyEnum.You ,DirectionEnum.RIGHT));
 
+        
+        System.out.println("wall, x"+wall.getx()+" , y :"+wall.gety());
         System.out.println("rock, x: "+ rock.getx()+", y: "+rock.gety() );
         System.out.println("rock2, x: "+ rock2.getx()+", y: "+rock2.gety() );
         System.out.println("rock3, x: "+ rock3.getx()+", y: "+rock3.gety() );
         System.out.println("rock4, x: "+ rock4.getx()+", y: "+rock4.gety() );
         System.out.println("rock5, x: "+ rock5.getx()+", y: "+rock5.gety() );
+        //System.out.println(factory.elementHashMap);
     }
 
 }
