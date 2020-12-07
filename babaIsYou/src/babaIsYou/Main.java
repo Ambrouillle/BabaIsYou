@@ -9,6 +9,9 @@ import babaIsYou.entity.entityEnum.DirectionEnum;
 import babaIsYou.entity.entityEnum.ElementEnum;
 import babaIsYou.entity.entityEnum.PropertyEnum;
 
+import fr.umlv.zen5.*;
+import java.awt.*;
+
 public class Main {
     public static void main(String[] args) {
         Level level = new Level(6,6); // creation level
@@ -34,22 +37,10 @@ public class Main {
         level.addEntityInCell(rock4,4,3); 
         level.addEntityInCell(rock5,1,4); 
         level.addPropInMap(PropertyEnum.Push, rock.getElemID() ); // ajout une deuxieme fois de la meme prop sur rock --> no pb
-        System.out.println("rock is push ? "+ rock.isPush()); // rock est bien push
-
-        System.out.println("wall, x"+wall.getx()+" , y :"+wall.gety());
-        System.out.println("rock, x: "+ rock.getx()+", y: "+rock.gety() );
-        System.out.println("rock2, x: "+ rock2.getx()+", y: "+rock2.gety() );
-        System.out.println("rock3, x: "+ rock3.getx()+", y: "+rock3.gety() );
-        System.out.println("rock4, x: "+ rock4.getx()+", y: "+rock4.gety() );
-        System.out.println("rock5, x: "+ rock5.getx()+", y: "+rock5.gety() );
-        
-        System.out.println("moove in action");
-        //level.moove(rock,DirectionEnum.DOWN);
-      
         
         System.out.println(level.mooveProp(factory,PropertyEnum.You ,DirectionEnum.RIGHT));
 
-        
+
         System.out.println("wall, x"+wall.getx()+" , y :"+wall.gety());
         System.out.println("rock, x: "+ rock.getx()+", y: "+rock.gety() );
         System.out.println("rock2, x: "+ rock2.getx()+", y: "+rock2.gety() );
