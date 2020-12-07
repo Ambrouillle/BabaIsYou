@@ -51,6 +51,7 @@ public class Main {
         level.removeEntityfromEveryWhere(factory, wall);
         System.out.println(factory.elementHashMap);
         System.out.println(level.propertyHashMap.get(wall.getElemID()));
+        System.out.println("test github branch");
     }
 
 }
