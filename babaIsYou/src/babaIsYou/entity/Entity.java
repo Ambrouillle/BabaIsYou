@@ -10,7 +10,6 @@ public abstract class Entity {
 		return false;
 	}
 	
-	
 	public Entity(int imageID) {
 		this.imageID = imageID;
 	}
