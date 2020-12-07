@@ -12,6 +12,7 @@ import babaIsYou.entity.Entity;
 import babaIsYou.entity.EntityFactory;
 import babaIsYou.entity.Property;
 import babaIsYou.entity.entityEnum.DirectionEnum;
+import babaIsYou.entity.entityEnum.Event;
 import babaIsYou.entity.entityEnum.PropertyEnum;
 
 /*cahque level contyient un tableau de cell : plateau
@@ -135,36 +136,58 @@ public class Level {
 	 * @return true if the object can be mooved
 	 * 		   false if not
 	 */
-	public boolean moove(Entity entity, DirectionEnum direction) {
+	public boolean moove(Entity entity, DirectionEnum direction,EntityFactory factory) {
 		int x = entity.getx()+direction.getmoveX();
 		int y = entity.gety()+direction.getmoveY();
 		if(testOutOfBound(x, y))
 			return false;
-		//if(isInTheLevel(entity,direction) && !(isNextStop(entity,direction))) {			
+		Event EventRes = atEnterInCell(entity, x, y, factory) ;
+		if(EventRes != Event.Stop) {
+			
+		}
+		switch(EventRes) {
+		case Defeat:
+			System.out.println("DEFEAT");
+			return false;
+		case Win:
+			System.out.println("Win");
+			return true;		
+		case Good:
 			return this.plateau[x][y].enter(entity, direction);
+		default :
+			break;
+		}
+		return false;
 	}
 	/**
-	 * 
+	 * Function that return the idElem of the Object with the PropertyEnum prop
 	 * @param push
 	 * @return the idElem of the object according to the prop
 	 */
-	public Object getElemnwithProp(PropertyEnum prop) {
+	public Integer getElemnwithProp(PropertyEnum prop) {
 		for (Map.Entry mapentry : propertyHashMap.entrySet()) {
 	           if(((ArrayList<PropertyEnum>) mapentry.getValue()).contains(prop)) {
-	        	   return mapentry.getKey();
+	        	   return (Integer) mapentry.getKey();
 	           }
 	        }
-		return null;
+		return 0;
 		}
 		
 	
-	
+	/**
+	 * fonction that moove every instance of Level with the PropertyEnum prop
+	 * will be used to moove every instance with You
+	 * @param factory: to have the ElementHashMap of all created instances
+	 * @param prop
+	 * @param direction
+	 * @return
+	 */
 	public boolean mooveProp(EntityFactory factory,PropertyEnum prop,DirectionEnum direction) {
-		Integer idElem = (Integer) getElemnwithProp(prop);
-		if(prop != null) {
+		Integer idElem = getElemnwithProp(prop);
+		if(idElem != 0) {
 			ArrayList<Element> list = factory.elementHashMap.get(idElem);
 			for(Element el : list) {
-				moove(el,direction);
+				moove(el,direction,factory);
 			}
 			return true;
 		}
@@ -172,9 +195,13 @@ public class Level {
 		return false;
 		
 	}
-	
+	/**
+	 * Function that destroy an element from everywhere
+	 * @param factory
+	 * @param ent
+	 */
 	public void removeEntityfromEveryWhere(EntityFactory factory, Entity ent) {
-		if(ent instanceof  Element) {
+		if(!ent.isText()) {
 			//remove ent from the factory
 			if(factory.elementHashMap.containsKey(((Element) ent).getElemID())) {
 				ArrayList list = factory.elementHashMap.get(((Element) ent).getElemID());
@@ -191,6 +218,95 @@ public class Level {
 			removeEntityInCell(ent);
 			
 		}
+	}
+	/*
+	public boolean whatIsWin(EntityFactory factory) {		
+		Integer WinElem = getElemnwithProp(PropertyEnum.Win);
+		Integer YouElem = getElemnwithProp(PropertyEnum.You);
+		if(WinElem != 0) {// no element have the Win property
+			//check if every instance of Player is in the same Cell as WinElem
+			ArrayList<Element> listWin = factory.elementHashMap.get(WinElem);
+			ArrayList<Element> listYou = factory.elementHashMap.get(YouElem);
+			for(Element elyou : listYou) {
+				
+			}
+			}
+			
+		}
+		return true;
+	}
+	*/
+	
+	
+	public Event atEnterInCell(Entity entity,int x, int y,EntityFactory factory) {
+		//check what happend when entity will go to the Cell x,y
+		//if win
+		Integer WinElem = getElemnwithProp(PropertyEnum.Win);
+		Integer YouElem = getElemnwithProp(PropertyEnum.You);
+		if(!entity.isText()) {//if ent if an Element			
+			Integer elemDefeat = getElemnwithProp(PropertyEnum.Defeat);
+			Integer elemYou = getElemnwithProp(PropertyEnum.You);
+			Integer elemWin = getElemnwithProp(PropertyEnum.Win);
+			Integer elemSink = getElemnwithProp(PropertyEnum.Sink);
+			Integer elemStop = getElemnwithProp(PropertyEnum.Stop);
+			Integer elemHot = getElemnwithProp(PropertyEnum.Hot);
+			Integer elemMelt = getElemnwithProp(PropertyEnum.Melt);
+			
+			for(Entity entiCell : this.plateau[x][y].content) {
+				//stop
+				if(((Element)entiCell).getElemID() == elemStop) {
+					return Event.Stop;
+				}
+				
+				//Defeat
+				if(((Element) entity).getElemID() == elemYou && ((Element)entiCell).getElemID() == elemDefeat) {
+					
+					return Event.Defeat;
+				}
+
+				//Win
+				if(((Element) entity).getElemID() == elemYou && ((Element)entiCell).getElemID() == elemWin) {
+					return Event.Win;
+				}
+				//SINK
+				if(((Element) entiCell).getElemID() == elemSink) {
+					//destroy of the entity 
+					//if entity is only instance of You == DEFEAT
+					if(((Element) entity).getElemID() == elemYou) {
+						//is only instance?
+
+						ArrayList<Element> list = factory.elementHashMap.get(((Element) entity).getElemID());
+						if(list.size() == 1) {
+							return Event.Defeat;							
+						}						
+					}
+					removeEntityfromEveryWhere(factory, entity);
+					return Event.Good;
+				}
+				//Melt
+				if(((Element) entiCell).getElemID() == elemHot && ((Element) entity).getElemID() == elemMelt) {
+					//destroy of the entity 
+					//if entity is only instance of You == DEFEAT
+					if(((Element) entity).getElemID() == elemYou) {
+						//is only instance?
+
+						ArrayList<Element> list = factory.elementHashMap.get(((Element) entity).getElemID());
+						if(list.size() == 1) {
+							return Event.Defeat;							
+						}						
+					}
+					removeEntityfromEveryWhere(factory, entity);
+					return Event.Good;
+				}
+				
+				
+			}
+			return Event.Good;
+			
+			
+		}
+		return Event.Good;
+		
 	}
 
 	

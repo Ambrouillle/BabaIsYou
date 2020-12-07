@@ -39,10 +39,11 @@ public class Main {
         
         System.out.println(level.mooveProp(factory,PropertyEnum.You ,DirectionEnum.RIGHT));
 
-        Application.run(Color.BLACK, context -> {
+        /*Application.run(Color.BLACK, context -> {
             GameArea game = new GameArea(context, level);
             game.run();
         });
+        */
     }
 
 }
