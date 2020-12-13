@@ -1,19 +1,18 @@
 package babaIsYou;
 
+import java.io.*;
 import java.util.ArrayList;
 
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import babaIsYou.entity.Element;
 import babaIsYou.entity.Entity;
 import babaIsYou.entity.EntityFactory;
 import babaIsYou.entity.Property;
-import babaIsYou.entity.entityEnum.DirectionEnum;
-import babaIsYou.entity.entityEnum.Event;
-import babaIsYou.entity.entityEnum.PropertyEnum;
+import babaIsYou.entity.entityEnum.*;
 
 /*cahque level contyient un tableau de cell : plateau
  * et une liste de propriété associé a des objets.:
@@ -25,7 +24,8 @@ import babaIsYou.entity.entityEnum.PropertyEnum;
 public class Level {
 	public Cell[][] plateau;
 	public HashMap<Integer,ArrayList<PropertyEnum>> propertyHashMap ; 	
-	
+	public ArrayList<Integer> toDestroy = new ArrayList<>();
+
 	public Level(int x, int y) {
 		plateau = new Cell[x][y];
 		for(int i = 0 ; i < x ; i++) {
@@ -33,7 +33,7 @@ public class Level {
 				plateau[i][j] = new Cell(this,i,j);
 			}
 		}
-		propertyHashMap = new HashMap<Integer,ArrayList<PropertyEnum>>() ;
+		propertyHashMap = new HashMap<>() ;
 	}
 	
 	/*ajouter l'entity entitiy dans la cell[x][y]* et modifie  les champs x et y de entity.*/
@@ -46,9 +46,7 @@ public class Level {
 	}
 
 	private boolean testOutOfBound(int x, int y) {
-		if(x >= plateau.length || y >= plateau[0].length || x < 0 || y < 0)
-			return true;
-		return false;
+		return x >= plateau.length || y >= plateau[0].length || x < 0 || y < 0;
 	}
 	/*enleve l'entity entitiy dans la cell[x][y]. Comme l'objet n'est plus acceccible nul part .
 	 * Il disparait*/
@@ -68,8 +66,7 @@ public class Level {
 				list.add(prop);
 				}
 		}
-		else { 
-			System.out.println("test");
+		else {
 			list = new ArrayList();
 			list.add(prop);
 			this.propertyHashMap.put(idElement,list);
@@ -136,58 +133,35 @@ public class Level {
 	 * @return true if the object can be mooved
 	 * 		   false if not
 	 */
-	public boolean moove(Entity entity, DirectionEnum direction,EntityFactory factory) {
+	public boolean moove(Entity entity, DirectionEnum direction) {
 		int x = entity.getx()+direction.getmoveX();
 		int y = entity.gety()+direction.getmoveY();
 		if(testOutOfBound(x, y))
 			return false;
-		Event EventRes = atEnterInCell(entity, x, y, factory) ;
-		if(EventRes != Event.Stop) {
-			
-		}
-		switch(EventRes) {
-		case Defeat:
-			System.out.println("DEFEAT");
-			return false;
-		case Win:
-			System.out.println("Win");
-			return true;		
-		case Good:
+		//if(isInTheLevel(entity,direction) && !(isNextStop(entity,direction))) {			
 			return this.plateau[x][y].enter(entity, direction);
-		default :
-			break;
-		}
-		return false;
 	}
 	/**
-	 * Function that return the idElem of the Object with the PropertyEnum prop
-	 * @param push
+	 * 
+	 * @param prop
 	 * @return the idElem of the object according to the prop
 	 */
-	public Integer getElemnwithProp(PropertyEnum prop) {
+	public Object getElemnwithProp(PropertyEnum prop) {
 		for (Map.Entry mapentry : propertyHashMap.entrySet()) {
 	           if(((ArrayList<PropertyEnum>) mapentry.getValue()).contains(prop)) {
-	        	   return (Integer) mapentry.getKey();
+	        	   return mapentry.getKey();
 	           }
 	        }
-		return 0;
+		return null;
 		}
-		
+
 	
-	/**
-	 * fonction that moove every instance of Level with the PropertyEnum prop
-	 * will be used to moove every instance with You
-	 * @param factory: to have the ElementHashMap of all created instances
-	 * @param prop
-	 * @param direction
-	 * @return
-	 */
 	public boolean mooveProp(EntityFactory factory,PropertyEnum prop,DirectionEnum direction) {
-		Integer idElem = getElemnwithProp(prop);
-		if(idElem != 0) {
+		Integer idElem = (Integer) getElemnwithProp(prop);
+		if(prop != null) {
 			ArrayList<Element> list = factory.elementHashMap.get(idElem);
 			for(Element el : list) {
-				moove(el,direction,factory);
+				moove(el,direction);
 			}
 			return true;
 		}
@@ -195,13 +169,9 @@ public class Level {
 		return false;
 		
 	}
-	/**
-	 * Function that destroy an element from everywhere
-	 * @param factory
-	 * @param ent
-	 */
+	
 	public void removeEntityfromEveryWhere(EntityFactory factory, Entity ent) {
-		if(!ent.isText()) {
+		if(ent instanceof  Element) {
 			//remove ent from the factory
 			if(factory.elementHashMap.containsKey(((Element) ent).getElemID())) {
 				ArrayList list = factory.elementHashMap.get(((Element) ent).getElemID());
@@ -219,96 +189,112 @@ public class Level {
 			
 		}
 	}
-	/*
-	public boolean whatIsWin(EntityFactory factory) {		
-		Integer WinElem = getElemnwithProp(PropertyEnum.Win);
-		Integer YouElem = getElemnwithProp(PropertyEnum.You);
-		if(WinElem != 0) {// no element have the Win property
-			//check if every instance of Player is in the same Cell as WinElem
-			ArrayList<Element> listWin = factory.elementHashMap.get(WinElem);
-			ArrayList<Element> listYou = factory.elementHashMap.get(YouElem);
-			for(Element elyou : listYou) {
-				
+	void LoadLevel(int levelNumber, EntityFactory factory){
+		try {
+			String row;
+			String filepath = "Ressources" + File.separator + levelNumber + ".csv";
+			BufferedReader csvReader = new BufferedReader(new FileReader(filepath));
+			while((row = csvReader.readLine()) != null){
+				String[] data = row.split(",");
+				switch (atoi(data[0])){
+					case 1:
+						this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
+						break;
+					case 2:
+						this.addEntityInCell(factory.create(PropertyEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
+						break;
+					case 3:
+						this.addEntityInCell(factory.create(NameEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
+						break;
+				//	case 4:
+				//		factory.create(OperatorEnum.valueOf(data[1]));
+				}
+
 			}
-			}
-			
 		}
-		return true;
+		catch(IOException ex){
+			System.err.println("An exception occured");
+			ex.printStackTrace();
+		}
 	}
-	*/
-	
-	
-	public Event atEnterInCell(Entity entity,int x, int y,EntityFactory factory) {
+	int atoi(String nb){
+		int result = 0;
+		for (int i = 0; i < nb.length(); i++)
+			result = result * 10 + nb.charAt(i) - '0';
+		return result;
+	}
+
+	public Events isLost(EntityFactory factory){
+		Integer idElem = (Integer) getElemnwithProp(PropertyEnum.You);
+
+		ArrayList<Element> list = factory.elementHashMap.get(idElem);
+		System.out.println(list);
+		if (list == null){
+			return Events.Defeat;
+		}
+		return Events.Good;
+	}
+
+	public Events atEnterInCell(Entity entity,int x, int y,EntityFactory factory,int id) {
 		//check what happend when entity will go to the Cell x,y
 		//if win
-		Integer WinElem = getElemnwithProp(PropertyEnum.Win);
-		Integer YouElem = getElemnwithProp(PropertyEnum.You);
-		if(!entity.isText()) {//if ent if an Element			
-			Integer elemDefeat = getElemnwithProp(PropertyEnum.Defeat);
-			Integer elemYou = getElemnwithProp(PropertyEnum.You);
-			Integer elemWin = getElemnwithProp(PropertyEnum.Win);
-			Integer elemSink = getElemnwithProp(PropertyEnum.Sink);
-			Integer elemStop = getElemnwithProp(PropertyEnum.Stop);
-			Integer elemHot = getElemnwithProp(PropertyEnum.Hot);
-			Integer elemMelt = getElemnwithProp(PropertyEnum.Melt);
-			
+		Events ev;
+		Entity toRemove;
+		toRemove = null;
+		if(!entity.isText()) {//if ent is an Element
+			Integer elemDefeat = (Integer) getElemnwithProp(PropertyEnum.Defeat);
+			Integer elemYou = (Integer) getElemnwithProp(PropertyEnum.You);
+			Integer elemWin = (Integer) getElemnwithProp(PropertyEnum.Win);
+			Integer elemSink = (Integer) getElemnwithProp(PropertyEnum.Sink);
+			Integer elemStop = (Integer) getElemnwithProp(PropertyEnum.Stop);
+			Integer elemHot = (Integer) getElemnwithProp(PropertyEnum.Hot);
+			Integer elemMelt = (Integer) getElemnwithProp(PropertyEnum.Melt);
+
 			for(Entity entiCell : this.plateau[x][y].content) {
 				//stop
-				if(((Element)entiCell).getElemID() == elemStop) {
-					return Event.Stop;
+				if (elemStop != null) {
+					if (((Element) entiCell).getElemID() == elemStop) {
+						return Events.Stop;
+					}
 				}
-				
+
 				//Defeat
-				if(((Element) entity).getElemID() == elemYou && ((Element)entiCell).getElemID() == elemDefeat) {
-					
-					return Event.Defeat;
+				if (elemDefeat != null) {
+					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemDefeat) {
+						System.out.println("Defeat");
+						return Events.Defeat;
+					}
 				}
 
 				//Win
-				if(((Element) entity).getElemID() == elemYou && ((Element)entiCell).getElemID() == elemWin) {
-					return Event.Win;
+				if (elemWin != null) {
+					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemWin) {
+						return Events.Win;
+					}
 				}
 				//SINK
-				if(((Element) entiCell).getElemID() == elemSink) {
-					//destroy of the entity 
-					//if entity is only instance of You == DEFEAT
-					if(((Element) entity).getElemID() == elemYou) {
-						//is only instance?
-
-						ArrayList<Element> list = factory.elementHashMap.get(((Element) entity).getElemID());
-						if(list.size() == 1) {
-							return Event.Defeat;							
-						}						
+				if (elemSink != null) {
+					if (((Element) entiCell).getElemID() == elemSink) {
+						toRemove = entiCell;
+						//destroy of the entity
+						//if entity is only instance of You == DEFEAT
+						this.toDestroy.add(id);
 					}
-					removeEntityfromEveryWhere(factory, entity);
-					return Event.Good;
 				}
 				//Melt
-				if(((Element) entiCell).getElemID() == elemHot && ((Element) entity).getElemID() == elemMelt) {
-					//destroy of the entity 
-					//if entity is only instance of You == DEFEAT
-					if(((Element) entity).getElemID() == elemYou) {
-						//is only instance?
-
-						ArrayList<Element> list = factory.elementHashMap.get(((Element) entity).getElemID());
-						if(list.size() == 1) {
-							return Event.Defeat;							
-						}						
+				if (elemMelt != null) {
+					if (((Element) entiCell).getElemID() == elemHot && ((Element) entity).getElemID() == elemMelt) {
+						//destroy of the entity
+						//if entity is only instance of You == DEFEAT
+						this.toDestroy.add(id);
 					}
-					removeEntityfromEveryWhere(factory, entity);
-					return Event.Good;
 				}
-				
-				
 			}
-			return Event.Good;
-			
-			
+			if (toRemove != null) {
+				removeEntityfromEveryWhere(factory, toRemove);
+			}
 		}
-		return Event.Good;
-		
+		ev = isLost(factory);
+		return ev;
 	}
-
-	
-
 }

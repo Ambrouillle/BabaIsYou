@@ -27,7 +27,7 @@ public class EntityFactory{
 		case Is:
 			return new OperatorIs(op.getimageID(),op.getElemID());
 		default:
-			throw new Exception("Operator non Regognize");
+			throw new Exception("Operator not Recognized");
 		}
 		
 	}
