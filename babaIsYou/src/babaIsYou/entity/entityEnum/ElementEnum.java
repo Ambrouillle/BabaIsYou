@@ -7,11 +7,11 @@ public enum ElementEnum {
 	Skull(404,404),	Lava(405,405),Rock(406,406);
 	
 	private  int imageID;
-	private int ElemID;
+	private int elemID;
 	
 	private ElementEnum(int idImg,int idElem) {
         this.imageID = idImg;  
-        this.ElemID = idElem;  
+        this.elemID = idElem;  
              
    }
 
@@ -20,7 +20,7 @@ public enum ElementEnum {
 	}
 
 	public int getElemID() {
-		return ElemID;
+		return elemID;
 	}
 	
 }

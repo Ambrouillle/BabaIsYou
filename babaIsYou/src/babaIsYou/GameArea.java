@@ -6,9 +6,8 @@ import babaIsYou.entity.Entity;
 import babaIsYou.entity.EntityFactory;
 import babaIsYou.entity.entityEnum.DirectionEnum;
 import babaIsYou.entity.entityEnum.ElementEnum;
-import babaIsYou.entity.entityEnum.Events;
+import babaIsYou.entity.entityEnum.EventBabaGame;
 import babaIsYou.entity.entityEnum.PropertyEnum;
-import babaIsYou.Level;
 import fr.umlv.zen5.*;
 
 import fr.umlv.zen5.ApplicationContext;
@@ -38,35 +37,49 @@ public class GameArea {
         this.Height = info.getHeight();
 
     }
-    Events checkMovement(Action action, Event event, EntityFactory factory){
-        Events ev;
-        ev = Events.Good;
+    EventBabaGame checkMovement(Action action, Event event, EntityFactory factory){
+        EventBabaGame ev;
+        ev = EventBabaGame.Good;
         int i;
         DirectionEnum dir;
-        ArrayList<Element> list;
 
         i = 0;
 
         if (List.of("UP","DOWN","LEFT","RIGHT").contains(event.getKey().name())) {
+
+            ArrayList<Element> list = new ArrayList<>();
+        	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Baba.getElemID()));
+        	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Lava.getElemID()));
+        	System.out.println(lvl.factory.elementHashMap.get(ElementEnum.Baba.getElemID()).size() );
             dir = DirectionEnum.valueOf(event.getKey().name());
-            list = factory.elementHashMap.get(lvl.getElemnwithProp(PropertyEnum.You));
+            for(int elemId: lvl.getElemnwithProp(PropertyEnum.You)) {
+            	list.addAll(lvl.factory.elementHashMap.get(elemId));
+            }
 
             for(Entity en : list) {
-                ev = lvl.atEnterInCell(en, en.getx() +dir.getmoveX(), en.gety()+ dir.getmoveY(), i);
-                if (ev == Events.Defeat){lvl.mooveProp(factory, PropertyEnum.You, dir);return ev;}
+            	
+                ev = lvl.moove(en, dir);
+//                		lvl.atEnterInCell(en, en.getx() +dir.getmoveX(), en.gety()+ dir.getmoveY(), i);
+                if (ev == EventBabaGame.Defeat){
+                	lvl.mooveProp(factory, PropertyEnum.You, dir);
+                	return EventBabaGame.Defeat;
+                }
+                if(ev== EventBabaGame.Win) {
+                	return EventBabaGame.Win;
+                }
                 i += 1;
             }
 
-            lvl.mooveProp(factory, PropertyEnum.You, dir);
+//            lvl.mooveProp(factory, PropertyEnum.You, dir);
             if (lvl.toDestroy != null) {
                 for (Integer id : lvl.toDestroy) {
 
                     lvl.removeFromToDestroy(factory);
                 }
             }
-            return lvl.isLost(factory) == Events.Good ? ev : Events.Defeat;
+            return lvl.isLost(factory) == EventBabaGame.Good ? ev : EventBabaGame.Defeat;
         }
-        return Events.Good;
+        return EventBabaGame.Good;
     }
 
     public void setSize(){
@@ -78,16 +91,20 @@ public class GameArea {
     }
 
     public int run(int id){
-        int return_val;
+        int returnVal;
         lvl = new Level(id); // creation lvl
         lvl.addPropInMap(PropertyEnum.You, ElementEnum.Baba.getElemID());
         lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
         lvl.addPropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
-        Events ev;
+        lvl.addPropInMap(PropertyEnum.Win,ElementEnum.Flag.getElemID());
+        lvl.addPropInMap(PropertyEnum.Hot,ElementEnum.Lava.getElemID());
+        lvl.addPropInMap(PropertyEnum.Melt,ElementEnum.Baba.getElemID());
+        lvl.addPropInMap(PropertyEnum.Stop,ElementEnum.Wall.getElemID());
+        EventBabaGame ev;
 
         setSize();
-        return_val = 1;
-        ev = Events.Good;
+        returnVal = 1;
+        ev = EventBabaGame.Good;
         area.RefreshScreen(context,(int)this.Width,(int)this.Height,lvl,boardOriginx,boardOriginy);
         for(;;) {
             Event event = context.pollOrWaitEvent(10);
@@ -96,22 +113,22 @@ public class GameArea {
             }
             Action action = event.getAction();
             if (event.getKey() == KeyboardKey.L) {
-                return return_val;
+                return returnVal;
             }
-            if (ev != Events.Defeat && ev != Events.Win) {
+            if (ev != EventBabaGame.Defeat && ev != EventBabaGame.Win) {
                 if (action == Action.KEY_PRESSED) {
                     ev = checkMovement(action, event, lvl.factory);
-                    if (lvl.isLost(lvl.factory) == Events.Defeat) {
-                        ev = Events.Defeat;
+                    if (lvl.isLost(lvl.factory) == EventBabaGame.Defeat) {
+                        ev = EventBabaGame.Defeat;
                     }
                     area.RefreshScreen(context, (int) this.Width, (int) this.Height, lvl, boardOriginx, boardOriginy);
                 }
             }
-            if (ev == Events.Defeat){
+            if (ev == EventBabaGame.Defeat){
                 area.Loose(context,(int)this.Width, (int)this.Height);
             }
-            else if(ev == Events.Win){
-                return_val = 2;
+            else if(ev == EventBabaGame.Win){
+                returnVal = 2;
                 area.Win(context,(int)this.Width, (int)this.Height);
             }
         }

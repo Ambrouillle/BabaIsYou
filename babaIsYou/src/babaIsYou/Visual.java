@@ -78,7 +78,7 @@ public class Visual {
             for (Cell plt[] : lvl.plateau){
                 for (Cell c : plt) {
                     for (Entity e : c.content) {
-                        this.DrawImg(context, e.getImageID(), boardOriginx +(e.getx()*imagesSize), boardOriginy +(e.gety()*imagesSize));
+                        this.DrawImg(context, e.getImageId(), boardOriginx +(e.getx()*imagesSize), boardOriginy +(e.gety()*imagesSize));
                     }
                 }
             }

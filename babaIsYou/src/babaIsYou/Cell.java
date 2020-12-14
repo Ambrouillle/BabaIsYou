@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import babaIsYou.entity.Entity;
+import babaIsYou.entity.Operator;
 import babaIsYou.entity.entityEnum.DirectionEnum;
  
 public class Cell {
@@ -11,15 +12,26 @@ public class Cell {
 	 * Elemnt ou Text*/
 	ArrayList<Entity> content;
 	Level level;
+	ArrayList<Operator> listener;
 	int x;
 	int y;
 	
 	public Cell( Level level, int x,int y) {
-			this.content = new ArrayList<>();
-			this.level = level;
-			this.x= x;
-			this.y= y;
+		this.content = new ArrayList<>();
+		this.listener = new ArrayList<>();
+		this.level = level;
+		this.x = x;
+		this.y = y;
 	}
+	
+	public void subscribe(Operator operator) {
+		listener.add(operator);
+	}
+	
+	public void unSubscribe(Operator operator) {
+		listener.remove(operator);
+	}
+	
 	/**
 	 * Function adding the Entity entity from this.Cell
 	 * @param entity
@@ -28,6 +40,9 @@ public class Cell {
 	 */
 	public void add(Entity entity) {
 		content.add(entity);
+		for (Operator operator : listener) {
+			
+		}
 		
 	}
 	/**
@@ -114,6 +129,7 @@ public class Cell {
 			this.level.pushedIn(elem.getx() + direction.getmoveX(),elem.gety() + direction.getmoveY(),elem, direction);
 						
 		}
+		//notifier liste listlllener
 		
 		return true;
 		
@@ -130,7 +146,7 @@ public class Cell {
 		List<Entity> copy =  getPushable();
 		this.level.removeEntityInCell(entity);
 		this.level.addEntityInCell(entity,x,y);
-		this.level.atEnterInCell(entity,x,y,entity.getid());
+		this.level.atEnterInCell(entity,x,y,entity.getEntityId());
 		this.level.removeFromToDestroy(level.factory);
 
 		for (Entity elem : copy) {
