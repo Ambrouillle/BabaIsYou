@@ -127,11 +127,12 @@ public class Cell {
 	public boolean pushedIn(Entity entity, DirectionEnum direction) {
 		if(this.isStop())
 			return false;
-
 		List<Entity> copy =  getPushable();
-		this.level.removeEntityInCell(entity); 
-		this.level.addEntityInCell(entity,x,y);	
-		
+		this.level.removeEntityInCell(entity);
+		this.level.addEntityInCell(entity,x,y);
+		this.level.atEnterInCell(entity,x,y,entity.getid());
+		this.level.removeFromToDestroy(level.factory);
+
 		for (Entity elem : copy) {
 			this.level.pushedIn(elem.getx() + direction.getmoveX(),elem.gety() + direction.getmoveY(),elem, direction);
 			

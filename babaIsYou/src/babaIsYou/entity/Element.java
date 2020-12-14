@@ -11,8 +11,8 @@ public class Element extends Entity {
 	private int idElement;
 	private Level level;
 	
-	public Element(int imageID, int idElement,Level level) {
-		super(imageID);
+	public Element(int imageID,int id, int idElement,Level level) {
+		super(imageID, id);
 		this.idElement = idElement;
 		this.level = level;
 		

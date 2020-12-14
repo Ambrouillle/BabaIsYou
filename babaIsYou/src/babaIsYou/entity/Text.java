@@ -2,8 +2,8 @@ package babaIsYou.entity;
 
 public abstract class Text extends Entity {
 
-	public Text(int imageID) {
-		super(imageID);
+	public Text(int imageID, int id) {
+		super(imageID, id);
 	}
 	@Override
 	public final boolean isPush() {

@@ -6,14 +6,20 @@ public abstract class Entity {
 	private int imageID;
 	private int x;
 	private int y;
+	private int id;
 	public boolean isText() {
 		return false;
 	}
 	
-	
-	public Entity(int imageID) {
+	public Entity(int imageID, int id) {
 		this.imageID = imageID;
+		this.id = id;
 	}
+
+	public int getid() {
+		return this.id;
+	}
+
 	public int getImageID() {
 		return this.imageID;
 	}
