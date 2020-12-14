@@ -185,6 +185,30 @@ public class Level {
 		}
 	}
 
+	public void spawnEntity(EntityFactory factory,String[] data){
+		switch (atoi(data[0])){
+			case 1://Element
+				if (atoi(data[4]) == 1){
+					String[] x_val = data[2].split("-");
+					String[] y_val = data[3].split("-");
+					for(int i = atoi(x_val[0]);i <= atoi(x_val[1]); i++){
+						for (int j = atoi(y_val[0]);j <= atoi(y_val[1]); j++)
+							this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])), i, j);
+					}
+				} else
+					this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
+				break;
+			case 2://Property
+				this.addEntityInCell(factory.create(PropertyEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
+				break;
+			case 3://Name
+				this.addEntityInCell(factory.create(NameEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
+				break;
+			//	case 4://Not Working Operator
+			//		factory.create(OperatorEnum.valueOf(data[1]));
+		}
+	}
+
 	public void removeFromToDestroy(EntityFactory factory){
 		Entity target = null;
 		for(Integer id : toDestroy){
@@ -209,27 +233,12 @@ public class Level {
 			this.y = atoi(data[1]);
 			plateau = new Cell[this.x][this.y];
 			for(int i = 0 ; i < x ; i++) {
-				for(int j = 0 ; j < y ; j++) {
-					plateau[i][j] = new Cell(this,i,j);
-				}
+				for(int j = 0 ; j < y ; j++) { plateau[i][j] = new Cell(this,i,j); }
 			}
 			propertyHashMap = new HashMap<>() ;
 			while((row = csvReader.readLine()) != null){
 				data = row.split(",");
-				switch (atoi(data[0])){
-					case 1://Element
-						this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
-						break;
-					case 2://Property
-						this.addEntityInCell(factory.create(PropertyEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
-						break;
-					case 3://Name
-						this.addEntityInCell(factory.create(NameEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
-						break;
-				//	case 4://Not Working Operator
-				//		factory.create(OperatorEnum.valueOf(data[1]));
-				}
-
+				spawnEntity(factory, data);
 			}
 		}
 		catch(IOException ex){
@@ -256,7 +265,6 @@ public class Level {
 
 	public Events atEnterInCell(Entity entity,int x, int y,int id) {
 		//check what happen when entity will go to the Cell x,y
-		//if win
 		if(testOutOfBound(x,y)){
 			return Events.Stop;
 		}
@@ -278,14 +286,12 @@ public class Level {
 						return Events.Stop;
 					}
 				}
-
 				//Defeat
 				if (elemDefeat != null) {
 					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemDefeat) {
 						return Events.Defeat;
 					}
 				}
-
 				//Win
 				if (elemWin != null) {
 					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemWin) {

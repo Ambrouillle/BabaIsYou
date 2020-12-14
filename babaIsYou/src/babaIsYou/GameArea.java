@@ -12,11 +12,12 @@ import babaIsYou.Level;
 import fr.umlv.zen5.*;
 
 import fr.umlv.zen5.ApplicationContext;
+import fr.umlv.zen5.Event;
 import fr.umlv.zen5.ScreenInfo;
 import fr.umlv.zen5.Event.Action;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class GameArea {
         lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
         lvl.addPropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
         Events ev;
-
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
         setSize();
         return_val = 1;
         ev = Events.Good;
@@ -114,6 +115,7 @@ public class GameArea {
                 return_val = 2;
                 area.Win(context,(int)this.Width, (int)this.Height);
             }
+            toolkit.sync();
         }
     }
 }
