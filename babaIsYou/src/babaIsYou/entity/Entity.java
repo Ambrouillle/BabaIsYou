@@ -1,6 +1,5 @@
 package babaIsYou.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import babaIsYou.Level;

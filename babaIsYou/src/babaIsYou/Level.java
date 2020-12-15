@@ -286,7 +286,7 @@ public class Level {
 		return EventBabaGame.Good;
 	}
 
-	public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
+	/*public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
 		//check what happen when entity will go to the Cell x,y
 		if(testOutOfBound(x,y)){
 			return EventBabaGame.Stop;
@@ -300,9 +300,7 @@ public class Level {
 			return EventBabaGame.Defeat;
 		if(listEvent.contains(EventBabaGame.DestroyAll)) {
 			for(Entity entiCell : this.plateau[x][y].content) {
-<<<<<<< HEAD
 				this.toDestroy.add(entiCell.getEntityId());
-=======
 				//stop
 				if (elemStop != null) {
 					if (((Element) entiCell).getElemID() == elemStop) {
@@ -338,7 +336,6 @@ public class Level {
 						this.toDestroy.add(id);
 					}
 				}
->>>>>>> branch 'N/14-12' of https://github.com/Ambrouillle/BabaIsYou
 			}
 			return EventBabaGame.DestroyAll;
 		}
@@ -351,7 +348,35 @@ public class Level {
 		return EventBabaGame.Good;
 		
 		
+	*/
+	public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
+		//check what happen when entity will go to the Cell x,y
+		//if win
+		if(testOutOfBound(x,y)){
+			return EventBabaGame.Stop;
+		}
+		List<EventBabaGame> listEvent = new ArrayList<>();
 		
+		for(Entity entiCell : this.plateau[x][y].content) {
+			listEvent.add(entiCell.isEnteredBy(entityEntering));
+		}
+		if(listEvent.contains(EventBabaGame.Defeat))
+			return EventBabaGame.Defeat;
+		if(listEvent.contains(EventBabaGame.DestroyAll)) {
+			for(Entity entiCell : this.plateau[x][y].content) {
+				this.toDestroy.add(entiCell.getEntityId());
+			}
+			return EventBabaGame.DestroyAll;
+		}
+		if(listEvent.contains(EventBabaGame.Destroy)) {
+			this.toDestroy.add(entityEntering.getEntityId());
+			return EventBabaGame.Destroy;
+		}
+		if(listEvent.contains(EventBabaGame.Win))
+			return EventBabaGame.Win;
+		return EventBabaGame.Good;
+	}
+
 //		EventBabaGame ev;
 //		ev = EventBabaGame.Good;
 		
@@ -408,7 +433,7 @@ public class Level {
 			
 //		}
 //		return ev;
-	}
+	
 
 	public HashMap<Integer,ArrayList<PropertyEnum>> getPropertyHashMap() {
 		return propertyHashMap;
