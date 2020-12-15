@@ -5,8 +5,8 @@ import babaIsYou.Level;
 public abstract class Operator extends Text {
 	private int objectId;
 	
-	public Operator(int imageID ,int id,int objectID, Level level) {
-		super(imageID, id,level);
+	public Operator(int imageID ,int id,int objectID, Level level, String name) {
+		super(imageID, id,level, name);
 		this.objectId = objectID;
 		
 		

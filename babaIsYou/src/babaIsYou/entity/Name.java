@@ -5,8 +5,8 @@ import babaIsYou.Level;
 public class Name extends Text {
 	private int objectId;
 
-	protected Name(int imageID,int id,int objectID,Level level) {
-		super(imageID, id,level);
+	protected Name(int imageID,int id,int objectID,Level level,String name) {
+		super(imageID, id,level, name);
 		this.objectId = objectID;
 	}
 	

@@ -5,8 +5,8 @@ public enum DirectionEnum {
 	 * pratique pour gerer le mouvement*/
 	RIGHT(1,0), LEFT(-1,0), UP(0,-1), DOWN(0,1) ;
 	
-	private int moveX;
-	private int moveY;
+	private final int moveX;
+	private final int moveY;
 	
 	private DirectionEnum(int moveX,int moveY) {  
         this.moveX = moveX;  

@@ -18,13 +18,17 @@ public abstract class Entity {
 	public boolean isText() {
 		return false;
 	}
-	
-	public Entity(int imageID, int entityId, Level level) {
+	private String entityName;
+
+	public Entity(int imageID, int entityId, Level level, String name) {
 		this.imageId = imageID;
 		this.entityId = entityId;
 		this.level = level;
+		this.entityName = name;
 	}
-	
+
+	public String getEntityName(){return this.entityName;}
+
 	public Level getLevel() {
 		return this.level;
 	}

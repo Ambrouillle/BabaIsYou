@@ -1,15 +1,14 @@
 package babaIsYou.entity;
 
-import java.util.List;
 
 import babaIsYou.Level;
-import babaIsYou.entity.entityEnum.PropertyEnum;
 
 public class Property extends Text {
 	private int objectId;
+
 	
-	public Property(int imageID,int id,int objectID,Level level) {
-		super(imageID, id,level);
+	public Property(int imageID,int id,int objectID,Level level, String propName) {
+		super(imageID, id,level,propName);
 		this.objectId = objectID;
 	}
 

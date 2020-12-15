@@ -31,7 +31,8 @@ public class Cell {
 	public void unSubscribe(Operator operator) {
 		listener.remove(operator);
 	}
-	
+
+
 	/**
 	 * Function adding the Entity entity from this.Cell
 	 * @param entity

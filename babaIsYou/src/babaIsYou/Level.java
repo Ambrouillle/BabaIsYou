@@ -4,11 +4,7 @@ import java.io.*;
 import java.util.*;
 
 
-import babaIsYou.entity.Element;
-import babaIsYou.entity.Entity;
-import babaIsYou.entity.EntityFactory;
-import babaIsYou.entity.Operator;
-import babaIsYou.entity.Property;
+import babaIsYou.entity.*;
 import babaIsYou.entity.entityEnum.*;
 
 /*cahque level contyient un tableau de cell : plateau
@@ -20,7 +16,7 @@ import babaIsYou.entity.entityEnum.*;
  * */
 public class Level {
 	public Cell[][] plateau;
-	private HashMap<Integer,ArrayList<PropertyEnum>> propertyHashMap ; 	
+	private HashMap<Integer,ArrayList<PropertyEnum>> propertyHashMap;
 	public ArrayList<Integer> toDestroy = new ArrayList<>();
 	public EntityFactory factory;
 	public int x;
@@ -28,22 +24,22 @@ public class Level {
 
 	public Level(int id) {
 		factory = new EntityFactory(this);
-		this.loadLevel(id, factory);
+		this.LoadLevel(id, factory);
 	}
 	
 	
 	
-	public boolean subcribeTo(Operator operator, int x,int y) {
-//		if(testOutOfBound(x, y))
-//			return false;
-//		subcribeTo(operator, x, y);
+	public boolean subscribeTo(Operator operator, int x,int y) {
+	if(testOutOfBound(x, y))
+			return false;
+		this.plateau[x][y].subscribe(operator);
 		return true;
 	}
 	
 	public void unSubcribeTo(Operator operator, int x,int y) {
-//		if(testOutOfBound(x, y))
-//			return;
-//		this.plateau[x][y].unSubscribe(operator);
+		if(testOutOfBound(x, y))
+			return;
+		this.plateau[x][y].unSubscribe(operator);
 	}
 	
 	/*ajouter l'entity entitiy dans la cell[x][y]* et modifie  les champs x et y de entity.*/
@@ -206,6 +202,33 @@ public class Level {
 		}
 	}
 
+	public void spawnEntity(EntityFactory factory,String[] data) throws Exception {
+		switch (atoi(data[0])){
+			case 1://Element
+				if (atoi(data[4]) == 1){
+					String[] x_val = data[2].split("-");
+					String[] y_val = data[3].split("-");
+					for(int i = atoi(x_val[0]);i <= atoi(x_val[1]); i++){
+						for (int j = atoi(y_val[0]);j <= atoi(y_val[1]); j++)
+							this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])), i, j);
+					}
+				} else
+					this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
+				break;
+			case 2://Property
+				this.addEntityInCell(factory.create(PropertyEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
+				break;
+			case 3://Name
+				this.addEntityInCell(factory.create(NameEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
+				break;
+			case 4://Operator
+				Operator op = factory.create(OperatorEnum.valueOf(data[1]));
+				this.plateau[atoi(data[2])][atoi(data[3])].subscribe(op);
+				this.addEntityInCell(op,atoi(data[2]),atoi(data[3]));
+				this.OperatorInteract(op);
+		}
+	}
+
 	public void removeFromToDestroy(EntityFactory factory){
 		Entity target = null;
 		for(Integer id : toDestroy){
@@ -219,7 +242,7 @@ public class Level {
 			removeEntityfromEveryWhere(factory, target);
 		}
 	}
-	public void loadLevel(int levelNumber, EntityFactory factory){
+	public void LoadLevel(int levelNumber, EntityFactory factory){
 		try {
 			String row;
 			String filepath = "Ressources" + File.separator + levelNumber + ".csv";
@@ -230,34 +253,22 @@ public class Level {
 			this.y = atoi(data[1]);
 			plateau = new Cell[this.x][this.y];
 			for(int i = 0 ; i < x ; i++) {
-				for(int j = 0 ; j < y ; j++) {
-					plateau[i][j] = new Cell(this,i,j);
-				}
+				for(int j = 0 ; j < y ; j++) { plateau[i][j] = new Cell(this,i,j); }
 			}
 			propertyHashMap = new HashMap<>() ;
 			while((row = csvReader.readLine()) != null){
 				data = row.split(",");
-				switch (atoi(data[0])){
-					case 1://Element
-						this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
-						break;
-					case 2://Property
-						this.addEntityInCell(factory.create(PropertyEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
-						break;
-					case 3://Name
-						this.addEntityInCell(factory.create(NameEnum.valueOf(data[1])),atoi(data[2]),atoi(data[3]));
-						break;
-				//	case 4://Not Working Operator
-				//		factory.create(OperatorEnum.valueOf(data[1]));
-				}
-
+				spawnEntity(factory, data);
 			}
 		}
 		catch(IOException ex){
-			System.err.println("An exception occured");
+			System.err.println("An exception occurred");
 			ex.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
+
 	int atoi(String nb){
 		int result = 0;
 		for (int i = 0; i < nb.length(); i++)
@@ -271,7 +282,7 @@ public class Level {
 			list.addAll(factory.elementHashMap.get(idElem));
 		}
 
-		if (list == null|| list.isEmpty()){
+		if (list.isEmpty()){
 			return EventBabaGame.Defeat;
 		}
 		return EventBabaGame.Good;
@@ -303,68 +314,31 @@ public class Level {
 		if(listEvent.contains(EventBabaGame.Win))
 			return EventBabaGame.Win;
 		return EventBabaGame.Good;
-		
-		
-		
-//		EventBabaGame ev;
-//		ev = EventBabaGame.Good;
-		
-		
-//		if(!entity.isText()) {//if ent is an Element
-//			List<Integer> elemDefeat = getElemnwithProp(PropertyEnum.Defeat);
-//			List<Integer> elemYou = getElemnwithProp(PropertyEnum.You);
-//			List<Integer> elemWin = getElemnwithProp(PropertyEnum.Win);
-//			List<Integer> elemSink = getElemnwithProp(PropertyEnum.Sink);
-//			List<Integer> elemStop = getElemnwithProp(PropertyEnum.Stop);
-//			List<Integer> elemHot = getElemnwithProp(PropertyEnum.Hot);
-//			List<Integer> elemMelt = getElemnwithProp(PropertyEnum.Melt);
-
-//			
-//			for(Entity entiCell : this.plateau[x][y].content) {
-//				//stop
-//				if (!elemStop.isEmpty()) {
-//					if (((Element) entiCell).getElemID() == elemStop.contains(entiCell)) {
-//						return EventBabaGame.Stop;
-//					}
-//				}
-//
-//				//Defeat
-//				if (!elemDefeat.isEmpty()) {
-//					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemDefeat) {
-//						return EventBabaGame.Defeat;
-//					}
-//				}
-//
-//				//Win
-//				if (elemWin != null) {
-//					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemWin) {
-//						return EventBabaGame.Win;
-//					}
-//				}
-//				//SINK
-//				if (elemSink != null) {
-//					if (((Element) entiCell).getElemID() == elemSink) {
-//						//destroy of the entity
-//						//if entity is only instance of You == DEFEAT
-//						this.toDestroy.add(id);
-//						this.toDestroy.add(entiCell.getEntityId());
-//					}
-//				}
-//				//Melt
-//				if (elemMelt != null) {
-//					if (((Element) entiCell).getElemID() == elemHot && ((Element) entity).getElemID() == elemMelt) {
-//						//destroy of the entity
-//						//if entity is only instance of You == DEFEAT
-//						this.toDestroy.add(id);
-//					}
-//				}
-//			}
-			
-//		}
-//		return ev;
 	}
 
 	public HashMap<Integer,ArrayList<PropertyEnum>> getPropertyHashMap() {
 		return propertyHashMap;
+	}
+
+	private void OperatorAux(Operator op,int x,int y){
+		if (!testOutOfBound(op.getx()-x, op.gety()-y)){
+			for(Entity e : this.plateau[op.getx()-x][op.gety()-y].content){
+				if (e.getClass() == Name.class){
+					if(!testOutOfBound(op.getx()+x, op.gety()+y)){
+						for(Entity f : this.plateau[op.getx()+x][op.gety()+y].content){
+							if (f.getClass() == Property.class){
+								this.addPropInMap(PropertyEnum.valueOf(f.getEntityName()),
+										ElementEnum.valueOf(e.getEntityName()).getElemID());
+								System.out.println(f.getEntityName() + e.getEntityName());
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	public void OperatorInteract(Operator op){
+		OperatorAux(op,1,0);
+		OperatorAux(op,0,1);
 	}
 }

@@ -9,8 +9,8 @@ import babaIsYou.entity.entityEnum.PropertyEnum;
 public abstract class Text extends Entity {
 	public boolean isUsed;
 
-	public Text(int imageID, int id,Level level) {
-		super(imageID, id, level);
+	public Text(int imageID, int id,Level level, String name) {
+		super(imageID, id, level, name);
 		isUsed = false;
 	}
 	@Override

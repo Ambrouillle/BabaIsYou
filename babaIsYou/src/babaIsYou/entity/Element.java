@@ -10,8 +10,8 @@ public class Element extends Entity {
 	 * creer a partir de l'enum*/
 	private int idElement;
 	
-	public Element(int imageID,int id, int idElement,Level level) {
-		super(imageID, id,level);
+	public Element(int imageID,int id, int idElement,Level level,String name) {
+		super(imageID, id,level,name);
 		this.idElement = idElement;
 		
 	}
