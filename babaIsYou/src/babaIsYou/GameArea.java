@@ -11,11 +11,12 @@ import babaIsYou.entity.entityEnum.PropertyEnum;
 import fr.umlv.zen5.*;
 
 import fr.umlv.zen5.ApplicationContext;
+import fr.umlv.zen5.Event;
 import fr.umlv.zen5.ScreenInfo;
 import fr.umlv.zen5.Event.Action;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,12 +97,17 @@ public class GameArea {
         lvl.addPropInMap(PropertyEnum.You, ElementEnum.Baba.getElemID());
         lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
         lvl.addPropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
+<<<<<<< HEAD
         lvl.addPropInMap(PropertyEnum.Win,ElementEnum.Flag.getElemID());
         lvl.addPropInMap(PropertyEnum.Hot,ElementEnum.Lava.getElemID());
         lvl.addPropInMap(PropertyEnum.Melt,ElementEnum.Baba.getElemID());
         lvl.addPropInMap(PropertyEnum.Stop,ElementEnum.Wall.getElemID());
         EventBabaGame ev;
 
+=======
+        Events ev;
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+>>>>>>> branch 'N/14-12' of https://github.com/Ambrouillle/BabaIsYou
         setSize();
         returnVal = 1;
         ev = EventBabaGame.Good;
@@ -131,6 +137,7 @@ public class GameArea {
                 returnVal = 2;
                 area.Win(context,(int)this.Width, (int)this.Height);
             }
+            toolkit.sync();
         }
     }
 }
