@@ -1,6 +1,7 @@
 package babaIsYou;
 
 import java.io.*;
+
 import java.util.*;
 
 
@@ -286,69 +287,6 @@ public class Level {
 		return EventBabaGame.Good;
 	}
 
-	/*public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
-		//check what happen when entity will go to the Cell x,y
-		if(testOutOfBound(x,y)){
-			return EventBabaGame.Stop;
-		}
-		List<EventBabaGame> listEvent = new ArrayList<>();
-		
-		for(Entity entiCell : this.plateau[x][y].content) {
-			listEvent.add(entiCell.isEnteredBy(entityEntering));
-		}
-		if(listEvent.contains(EventBabaGame.Defeat))
-			return EventBabaGame.Defeat;
-		if(listEvent.contains(EventBabaGame.DestroyAll)) {
-			for(Entity entiCell : this.plateau[x][y].content) {
-				this.toDestroy.add(entiCell.getEntityId());
-				//stop
-				if (elemStop != null) {
-					if (((Element) entiCell).getElemID() == elemStop) {
-						return Events.Stop;
-					}
-				}
-				//Defeat
-				if (elemDefeat != null) {
-					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemDefeat) {
-						return Events.Defeat;
-					}
-				}
-				//Win
-				if (elemWin != null) {
-					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemWin) {
-						return Events.Win;
-					}
-				}
-				//SINK
-				if (elemSink != null) {
-					if (((Element) entiCell).getElemID() == elemSink) {
-						//destroy of the entity
-						//if entity is only instance of You == DEFEAT
-						this.toDestroy.add(id);
-						this.toDestroy.add(entiCell.getid());
-					}
-				}
-				//Melt
-				if (elemMelt != null) {
-					if (((Element) entiCell).getElemID() == elemHot && ((Element) entity).getElemID() == elemMelt) {
-						//destroy of the entity
-						//if entity is only instance of You == DEFEAT
-						this.toDestroy.add(id);
-					}
-				}
-			}
-			return EventBabaGame.DestroyAll;
-		}
-		if(listEvent.contains(EventBabaGame.Destroy)) {
-			this.toDestroy.add(entityEntering.getEntityId());
-			return EventBabaGame.Destroy;
-		}
-		if(listEvent.contains(EventBabaGame.Win))
-			return EventBabaGame.Win;
-		return EventBabaGame.Good;
-		
-		
-	*/
 	public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
 		//check what happen when entity will go to the Cell x,y
 		//if win
@@ -376,64 +314,6 @@ public class Level {
 			return EventBabaGame.Win;
 		return EventBabaGame.Good;
 	}
-
-//		EventBabaGame ev;
-//		ev = EventBabaGame.Good;
-		
-		
-//		if(!entity.isText()) {//if ent is an Element
-//			List<Integer> elemDefeat = getElemnwithProp(PropertyEnum.Defeat);
-//			List<Integer> elemYou = getElemnwithProp(PropertyEnum.You);
-//			List<Integer> elemWin = getElemnwithProp(PropertyEnum.Win);
-//			List<Integer> elemSink = getElemnwithProp(PropertyEnum.Sink);
-//			List<Integer> elemStop = getElemnwithProp(PropertyEnum.Stop);
-//			List<Integer> elemHot = getElemnwithProp(PropertyEnum.Hot);
-//			List<Integer> elemMelt = getElemnwithProp(PropertyEnum.Melt);
-
-//			
-//			for(Entity entiCell : this.plateau[x][y].content) {
-//				//stop
-//				if (!elemStop.isEmpty()) {
-//					if (((Element) entiCell).getElemID() == elemStop.contains(entiCell)) {
-//						return EventBabaGame.Stop;
-//					}
-//				}
-//
-//				//Defeat
-//				if (!elemDefeat.isEmpty()) {
-//					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemDefeat) {
-//						return EventBabaGame.Defeat;
-//					}
-//				}
-//
-//				//Win
-//				if (elemWin != null) {
-//					if (((Element) entity).getElemID() == elemYou && ((Element) entiCell).getElemID() == elemWin) {
-//						return EventBabaGame.Win;
-//					}
-//				}
-//				//SINK
-//				if (elemSink != null) {
-//					if (((Element) entiCell).getElemID() == elemSink) {
-//						//destroy of the entity
-//						//if entity is only instance of You == DEFEAT
-//						this.toDestroy.add(id);
-//						this.toDestroy.add(entiCell.getEntityId());
-//					}
-//				}
-//				//Melt
-//				if (elemMelt != null) {
-//					if (((Element) entiCell).getElemID() == elemHot && ((Element) entity).getElemID() == elemMelt) {
-//						//destroy of the entity
-//						//if entity is only instance of You == DEFEAT
-//						this.toDestroy.add(id);
-//					}
-//				}
-//			}
-			
-//		}
-//		return ev;
-	
 
 	public HashMap<Integer,ArrayList<PropertyEnum>> getPropertyHashMap() {
 		return propertyHashMap;
