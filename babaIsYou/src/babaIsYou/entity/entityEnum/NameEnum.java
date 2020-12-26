@@ -5,10 +5,10 @@ public enum NameEnum {
 	Water(103,103),Skull(104,104),Lava(105,105),
 	Rock(106,106);
 	 
-	private  int imageID;
-	private int ElemID;
+	private final int imageID;
+	private final int ElemID;
 	
-	private NameEnum(int idImg,int idElem) {  
+	NameEnum(int idImg, int idElem) {
         this.imageID = idImg;  
         this.ElemID = idElem;  
              

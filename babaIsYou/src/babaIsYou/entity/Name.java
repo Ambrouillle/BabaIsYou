@@ -1,12 +1,24 @@
 package babaIsYou.entity;
 
-public class Name extends Text {
-	private int objectId;
+import babaIsYou.Level;
 
-	protected Name(int imageID ,int objectID) {
-		super(imageID);
+public class Name extends Text {
+	private final int objectId;
+
+	protected Name(int imageID,int id,int objectID,Level level) {
+		super(imageID, id,level);
 		this.objectId = objectID;
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param text
+	 * @param enter
+	 */
+	public void notifyMe(int x, int y, Text text, boolean enter) {
+		//TODO:
+	}
 
 }
