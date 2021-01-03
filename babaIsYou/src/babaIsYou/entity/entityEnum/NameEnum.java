@@ -13,11 +13,18 @@ public enum NameEnum {
         this.ElemID = idElem;  
              
    }
-
+	/**
+	 * Getter for imageID
+	 * @return this.imageID
+	 */
 	public int getimageID() {
 		return imageID;
 	}
 
+	/**
+	 * Getter for ElemID
+	 * @return this.ElemID
+	 */
 	public int getElemID() {
 		return ElemID;
 	}

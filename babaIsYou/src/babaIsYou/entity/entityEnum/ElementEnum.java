@@ -12,11 +12,18 @@ public enum ElementEnum {
         this.elemID = idElem;  
              
    }
-
+	/**
+	 * Getter of imageID
+	 * @return this.imageID
+	 */
 	public int getimageID() {
 		return imageID;
 	}
 
+	/**
+	 * Getter of elemID
+	 * @return this.elemID
+	 */
 	public int getElemID() {
 		return elemID;
 	}

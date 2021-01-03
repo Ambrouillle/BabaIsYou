@@ -8,16 +8,14 @@ import babaIsYou.entity.Operator;
 import babaIsYou.entity.entityEnum.DirectionEnum;
  
 public class Cell {
-	/*une cellule copntient une array list de toute les netité ( truc) présent dessus. 
-	 * Elemnt ou Text*/
-	ArrayList<Entity> content;
-	Level level;
-	ArrayList<Operator> listener;
-	int x;
-	int y;
+	private ArrayList<Entity> content;
+	private Level level;
+	private ArrayList<Operator> listener;
+	private int x;
+	private int y;
 	
 	public Cell( Level level, int x,int y) {
-		this.content = new ArrayList<>();
+		this.setContent(new ArrayList<>());
 		this.listener = new ArrayList<>();
 		this.level = level;
 		this.x = x;
@@ -39,7 +37,7 @@ public class Cell {
 	 * 		   false if not
 	 */
 	public void add(Entity entity) {
-		content.add(entity);
+		getContent().add(entity);
 		for (Operator operator : listener) {
 			
 		}
@@ -52,7 +50,7 @@ public class Cell {
 	 * 		   false if not
 	 */
 	public boolean remove(Entity entity) {
-		return content.remove(entity);
+		return getContent().remove(entity);
 		
 		
 	}
@@ -63,7 +61,7 @@ public class Cell {
 	 */
 	public boolean isStop() {
 
-		for(Entity ent :content) {
+		for(Entity ent :getContent()) {
 			if(ent.isStop()) {
 				return true;
 			}
@@ -77,7 +75,7 @@ public class Cell {
 	 */
 	private List<Entity> getPushable() {
 		ArrayList<Entity> list  = new ArrayList<>();
-		for(Entity ent :content) {
+		for(Entity ent :getContent()) {
 			if(ent.isPush()) {
 				list.add(ent);
 			}
@@ -87,7 +85,7 @@ public class Cell {
 	}
 	
 	/**
-	 * check if is possible to push entity is the next Cell
+	 * check if is possible to enter in the next Cell
 	 * @param entity
 	 * @param direction
 	 * @return true if can
@@ -101,7 +99,12 @@ public class Cell {
 			return false;
 		return true;
 	}
-	
+	/**check if is possible to push the next Cell
+	 * @param entity
+	 * @param direction
+	 * @return true if can
+	 * 		   false if not
+	 */
 	private boolean canBePushed( DirectionEnum direction) {
 		for(Entity e :this.getPushable()) 
 			if(!level.canEnter(x + direction.getmoveX(), y + direction.getmoveY(), e,direction))
@@ -112,7 +115,8 @@ public class Cell {
 	}
 	
 	/**
-	 * check if is possible to push entity is the next Cell
+	 * check the enter on the next cell has been successful
+	 * it will notice the cell of the moovement (in the case of entity is text)
 	 * @param entity
 	 * @param direction
 	 * @return true if can
@@ -135,10 +139,11 @@ public class Cell {
 		
 	}
 	/**
-	 * check if it 's possible to add and remove entity in the next case accordingly to direction
+	 * push entity in the next cell accordingly to direction
 	 * @param entity
 	 * @param direction
-	 * @return
+	 * @return true if the entity is pushable
+	 * 		   false if not
 	 */
 	public boolean pushedIn(Entity entity, DirectionEnum direction) {
 		if(this.isStop())
@@ -157,8 +162,18 @@ public class Cell {
 			
 		return true;
 	}
+
+	public ArrayList<Entity> getContent() {
+		return content;
+	}
+
+	public void setContent(ArrayList<Entity> content) {
+		this.content = content;
+	}
 	
 	
 	
 
 }
+
+

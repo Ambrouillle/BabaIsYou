@@ -11,13 +11,15 @@ import babaIsYou.entity.entityEnum.PropertyEnum;
 
 
 public class EntityFactory{	
-	public Map<Integer,ArrayList<Element>> elementHashMap ; 	
+	private Map<Integer,ArrayList<Element>> elementHashMap ; 	
 	private final Level level;
 	private int idEntity;
+	
+	
 	public EntityFactory(Level level) {
 		idEntity = 0;
 		this.level = level;
-		elementHashMap = new HashMap<>() ;
+		setElementHashMap(new HashMap<>()) ;
 	}
 	public Name create(NameEnum name) {
 		Name ret = new Name(name.getimageID(),idEntity,name.getElemID(),level);
@@ -40,15 +42,15 @@ public class EntityFactory{
 		ArrayList<Element> list;
 		Element ret = new Element(el.getimageID(),this.idEntity,el.getElemID(),level);
 		idEntity += 1;
-		if(this.elementHashMap.containsKey(el.getElemID())) {
-			list = this.elementHashMap.get(el.getElemID());
+		if(this.getElementHashMap().containsKey(el.getElemID())) {
+			list = this.getElementHashMap().get(el.getElemID());
 			list.add(ret);
 		}
 		else {
 			list = new ArrayList<>();
 			list.add(ret);
 		}
-		elementHashMap.put(el.getElemID(),list );
+		getElementHashMap().put(el.getElemID(),list );
 		return ret;
 	}
 		
@@ -57,6 +59,12 @@ public class EntityFactory{
 		Property ret = new Property(prop.getimageID(),this.idEntity,prop.getElemID(),level);
 		idEntity += 1;
 		return ret;
+	}
+	public Map<Integer,ArrayList<Element>> getElementHashMap() {
+		return elementHashMap;
+	}
+	public void setElementHashMap(Map<Integer,ArrayList<Element>> elementHashMap) {
+		this.elementHashMap = elementHashMap;
 	}
 }
 

@@ -8,7 +8,6 @@ import java.util.List;
 
 public abstract class Entity {
 	/*each entity have x and y linked to the number of the cell place in the level)*/
-	/*chaque entity a un image ID ( correpondant au numero d'image qu'on va associé)*/
 	private final int imageId;
 	private int x;
 	private int y;
@@ -23,32 +22,56 @@ public abstract class Entity {
 		this.entityId = entityId;
 		this.level = level;
 	}
-	
+	/**
+	 * Getter this.level
+	 * @return this.level
+	 */
 	public Level getLevel() {
 		return this.level;
 	}
 
+	/**
+	 * Getter this.entityId
+	 * @return this.entityId
+	 */
 	public int getEntityId() {
 		return this.entityId;
 	}
 
+	/**
+	 * Getter this.imageId
+	 * @return this.imageId
+	 */
 	public int getImageId() {
 		return this.imageId;
 	}
-	/*x getteur*/
+	/**
+	 * Getter this.x
+	 * @return this.x
+	 */
 	public int getx() {
 		return this.x;
 	}
-	/*x setteur*/
+	
+	/**
+	 * Setter this.x
+	 * @return this.x
+	 */
 	public void setx(int x2) {
 		this.x = x2;
 	}
 	
-	/*y getteur*/
+	/**
+	 * Getter this.y
+	 * @return this.y
+	 */
 	public int gety() {
 		return this.y;
 	}
-	/*x setteur*/
+	/**
+	 * Setter this.y
+	 * @return this.y
+	 */
 	public void sety(int y2) {
 		this.y = y2;
 	}

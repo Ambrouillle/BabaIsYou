@@ -69,7 +69,7 @@ public class Visual {
             this.DrawPLayableFIeld(context,boardOriginx,boardOriginy,lvl);
             for (Cell[] plt : lvl.plateau){
                 for (Cell c : plt) {
-                    for (Entity e : c.content) {
+                    for (Entity e : c.getContent()) {
                         this.DrawImg(context, e.getImageId(), boardOriginx +(e.getx()*imagesSize), boardOriginy +(e.gety()*imagesSize));
                     }
                 }

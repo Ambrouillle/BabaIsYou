@@ -47,10 +47,10 @@ public class GameArea {
             ArrayList<Element> list = new ArrayList<>();
         	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Baba.getElemID()));
         	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Lava.getElemID()));
-        	System.out.println(lvl.factory.elementHashMap.get(ElementEnum.Baba.getElemID()).size() );
+        	System.out.println(lvl.factory.getElementHashMap().get(ElementEnum.Baba.getElemID()).size() );
             dir = DirectionEnum.valueOf(event.getKey().name());
             for(int elemId: lvl.getElemnwithProp(PropertyEnum.You)) {
-            	list.addAll(lvl.factory.elementHashMap.get(elemId));
+            	list.addAll(lvl.factory.getElementHashMap().get(elemId));
             }
 
             for(Entity en : list) {
