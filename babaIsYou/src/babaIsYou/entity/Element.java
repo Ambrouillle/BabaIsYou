@@ -8,24 +8,24 @@ import babaIsYou.entity.entityEnum.PropertyEnum;
 public class Element extends Entity {
 	
 	private final int idElement;
-	
+
 	public Element(int imageID,int id, int idElement,Level level) {
 		super(imageID, id,level);
 		this.idElement = idElement;
 		
 	}
 	/**
-	 * getter ElemId
-	 * @return
+	 * ElemId getter.
+	 * @return ElemId.
 	 */
 	public int getElemID() {
         return this.idElement;
     }
 	
 	/**
-	 * check if this is linked to the Property PUSH in level
-	 * return true if is linked
-	 * 		  false if not
+	 * Check if this is linked to the Property PUSH in level.
+	 * @return true if is linked.
+	 * 		  false if not.
 	 */
 	public boolean isPush() {
 		if( this.getLevel().getPropertyHashMap().containsKey(this.idElement)) {
@@ -34,9 +34,9 @@ public class Element extends Entity {
 		return false;
 	}
 	/**
-	 * check if this is linked to the Property STOP in level
-	 * return true if is linked
-	 * 		  false if not
+	 * Check if this is linked to the Property STOP in level.
+	 * @return true if is linked.
+	 * 		  false if not.
 	 */
 	public boolean isStop() {
 		if( getLevel().getPropertyHashMap().containsKey(this.idElement)) {
@@ -46,10 +46,6 @@ public class Element extends Entity {
 	}
 
 	@Override
-	/**
-	 * function that return the List of all properties linked to this in Level
-	 * return the List of all properties linked to this in Level
-	 */
 	protected List<PropertyEnum> getProperties() {		
 		return this.getLevel().getPropertyHashMap().get(this.idElement);
 	}

@@ -7,7 +7,6 @@ import babaIsYou.Level;
 import babaIsYou.entity.entityEnum.PropertyEnum;
 
 public abstract class Text extends Entity {
-	private boolean isUsed;
 
 	public Text(int imageID, int id,Level level) {
 		super(imageID, id, level);
@@ -40,11 +39,8 @@ public abstract class Text extends Entity {
 	public boolean isProperty() {
 		return false;
 	}
-	public boolean isUsed() {
-		return isUsed;
-	}
+
 	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
 	}
 	public boolean isYou() {
 		return false;

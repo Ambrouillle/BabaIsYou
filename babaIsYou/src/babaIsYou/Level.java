@@ -9,58 +9,54 @@ import babaIsYou.entity.Entity;
 import babaIsYou.entity.EntityFactory;
 import babaIsYou.entity.Name;
 import babaIsYou.entity.Operator;
-import babaIsYou.entity.Property;
 import babaIsYou.entity.entityEnum.*;
 
 public class Level {
 	private Cell[][] plateau;
 	private HashMap<Integer,ArrayList<PropertyEnum>> propertyHashMap ; 	
-	private ArrayList<Integer> toDestroy = new ArrayList<>();
-	private EntityFactory factory;
-	private int x;
-	private int y;
+	private final ArrayList<Integer> toDestroy = new ArrayList<>();
+	private final EntityFactory factory;
 
+	/**
+	 * Level Constructor.
+	 * @param id Id of the level to load.
+	 */
 	public Level(int id) {
 		factory = new EntityFactory(this);
 		this.LoadLevel(id, getFactory());
 	}
-	
+
 	/**
-	 * Function subscribing the 2 Cells on the Name's right and the 2 Cells under the Name
-	 * @param name
-	 * @param x
-	 * @param y
-	 * @return
+	 * Allow the given name to subscribe to a cell.
+	 * @param name Name that has to subscribe.
+	 * @param x X-axis coordinate of the cell's position.
+	 * @param y Y-axis coordinate of the cell's position.
 	 */
-	public boolean subscribeTo(Name name, int x,int y) {
+	public void subscribeTo(Name name, int x, int y) {
 		if(testOutOfBound(x, y)) {
-			return false;
+			return;
 		}
 		plateau[x][y].subscribe(name);
-		return true;
 	}
-	
-	
+
 	/**
-	 * Function Unsubscribing the 2 Cells on the Name's right and the 2 Cells under the Name
-	 * @param name
-	 * @param x
-	 * @param y
-	 * @return
+	 * Allow the given name to unsubscribe to a cell.
+	 * @param name Name that has to unsubscribe.
+	 * @param x X-axis coordinate of the cell's position.
+	 * @param y Y-axis coordinate of the cell's position.
 	 */
-	public boolean unSubscribeTo(Name name, int x,int y) {
+	public void unSubscribeTo(Name name, int x, int y) {
 		if(testOutOfBound(x, y)) {
-			return false;
+			return;
 		}
 		plateau[x][y].unSubscribe(name);
-		return true;
 	}
 	
 	/**
-	 * add the Entity entity on the Cell x,y
-	 * @param entity
-	 * @param x
-	 * @param y
+	 * Add the Entity entity on the Cell x,y.
+	 * @param entity Entity to add.
+	 * @param x X-axis coordinate of the desired position.
+	 * @param y Y-axis coordinate of the desired position.
 	 */
 	public void addEntityInCell(Entity entity,int x, int y) {
 		if(testOutOfBound(x, y))
@@ -70,19 +66,19 @@ public class Level {
 		getPlateau()[x][y].add(entity);//add
 	}
 
-		/**
-		 * check if the Cell x,y is in the Level
-		 * @param x
-		 * @param y
-		 * @return
-		 */
+	/**
+	 * Check if the Cell x,y is in the Level.
+	 * @param x X-axis coordinate of the position to check.
+	 * @param y Y-axis coordinate of the position to check.
+	 * @return True if (x,y) is outside the grid.
+	 * */
 	private boolean testOutOfBound(int x, int y) {
 		return x >= getPlateau().length || y >= getPlateau()[0].length || x < 0 || y < 0;
 	}
 	
 	/**
-	 * remove the Entity entity from his Cell
-	 * @param entity
+	 * Remove the Entity entity from his Cell.
+	 * @param entity Entity that needs to be removed.
 	 */
 	public void removeEntityInCell(Entity entity) {
 		getPlateau()[entity.getx()][entity.gety()].remove(entity);
@@ -91,9 +87,9 @@ public class Level {
 	
 	
 	/**
-	 * add the Property prop linked to the Element (idElem) in the Level
-	 * @param prop
-	 * @param idElement
+	 * Add the Property prop linked to the Element (idElem) in the Level.
+	 * @param prop Property that have to be linked.
+	 * @param idElement Element that we want to link the prop to.
 	 */
 	public void addPropInMap(PropertyEnum prop, int idElement ) {
 		ArrayList<PropertyEnum> list;
@@ -104,31 +100,30 @@ public class Level {
 				}
 		}
 		else {
-			list = new ArrayList<PropertyEnum>();
+			list = new ArrayList<>();
 			list.add(prop);
 			this.getPropertyHashMap().put(idElement,list);
 		}
 		
 	}
 	/**
-	 * call the same function in Cell that push entity in the next cell accordingly to direction
-	 * @param x
-	 * @param y
-	 * @param entity
-	 * @param direction
-	 * @return
+	 * Call the same function in Cell that push entity in the next cell accordingly to direction.
+	 * @param x X-axis coordinate of the destination's position.
+	 * @param y Y-axis coordinate of the destination's position.
+	 * @param entity Moved entity.
+	 * @param direction Desired destination.
 	 */
-	public boolean pushedIn(int x,int y,Entity entity, DirectionEnum direction) {
+	public void pushedIn(int x,int y,Entity entity, DirectionEnum direction) {
 
 		if(testOutOfBound(x, y))
-			return false;
-		return this.getPlateau()[x][y].pushedIn(entity, direction);	
+			return;
+		this.getPlateau()[x][y].pushedIn(entity, direction);
 	
 	}
 	/**
-	 * remove the Property prop accordingly to Element elem in this.Level
-	 * @param prop
-	 * @param elem
+	 * Remove the Property prop from Element elem in this.Level.
+	 * @param prop Property to remove.
+	 * @param idElement id of the concerned element.
 	 */
 	public void removePropInMap(PropertyEnum prop,int idElement ) {
 		if(this.getPropertyHashMap().containsKey(idElement)) {
@@ -137,56 +132,44 @@ public class Level {
 			}
 		}
 	}
-
 	/**
-	 * Check if there is any object STOP is the Cell[x][y]or if the Cell is out of the map
-	 * @return true if there is an object STOP
-	 * 		   false if not
+	 * Call the same function  in Cell that check if is possible to enter in the next Cell.
+	 * @param x X-axis coordinate of the position to check.
+	 * @param y Y-axis coordinate of the position to check.
+	 * @param direction Direction wanted.
+	 * @return True if allowed to move here.
+	 *			False if not.
 	 */
-	public boolean isCaseisStop(int x, int y){
-		if(testOutOfBound(x, y))
-			return true;
-		return this.getPlateau()[x][y].isStop();
-	}
-	
-	/**
-	 * Call the same function  in Cell that check if is possible to enter in the next Cell
-	 * @param x
-	 * @param y
-	 * @param entity
-	 * @param direction
-	 * @return
-	 */
-	public boolean canEnter( int x,int y, Entity entity, DirectionEnum direction) {
+	public boolean canEnter(int x, int y, DirectionEnum direction) {
 		if(testOutOfBound(x, y)) {
 			return false;
 		}
-		return this.getPlateau()[x][y].canEnter(entity, direction);
+		return this.getPlateau()[x][y].canEnter(direction);
 	}
 	/**
-	 * function that moove the Entity entity in the Direction
-	 * @param entity
-	 * @param direction
+	 * Function that move the Entity entity in the Direction.
+	 * @param entity Entity to move.
+	 * @param direction Direction to move it to.
 	 */
-	public EventBabaGame moove(Entity entity, DirectionEnum direction) {
+	public EventBabaGame move(Entity entity, DirectionEnum direction) {
 		int x = entity.getx()+direction.getmoveX();
 		int y = entity.gety()+direction.getmoveY();
 		if(testOutOfBound(x, y))
 			return EventBabaGame.Stop;
 		if( this.getPlateau()[x][y].enter(entity, direction))
-			return atEnterInCell(entity, x, y, entity.getEntityId());
+			return atEnterInCell(entity, x, y);
 		return EventBabaGame.Stop;
 	}
 	/**
-	 * function that return the ArrayList of the idElem of the object according to the prop
-	 * @param prop
-	 * @return ArrayList of the idElem of the object according to the prop
+	 * Function that gives the list of the elements with the specified property.
+	 * @param prop Property searched.
+	 * @return idElement's ArrayList of the objects with 'prop' property.
 	 */
-	public List<Integer> getElemnwithProp(PropertyEnum prop) {
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		for (Map.Entry<Integer, ArrayList<PropertyEnum>> mapentry : getPropertyHashMap().entrySet()) {
-	           if((mapentry.getValue()).contains(prop)) {
-	        	   list.add(mapentry.getKey());
+	public List<Integer> getElemWithProp(PropertyEnum prop) {
+		ArrayList<Integer> list = new ArrayList<>();
+		for (Map.Entry<Integer, ArrayList<PropertyEnum>> mapEntry : getPropertyHashMap().entrySet()) {
+	           if((mapEntry.getValue()).contains(prop)) {
+	        	   list.add(mapEntry.getKey());
 	           }
 	        }
 		return list;
@@ -194,21 +177,21 @@ public class Level {
 
 	
 	/**
-	 * moove all elements with the Property prop to the next Cell( according to direction)
-	 * @param factory
-	 * @param prop
-	 * @param direction
-	 * @return  true if there is at least one element according to the prop
-	 * 			false if there is no element with the prop
+	 * Move all elements with the Property 'prop' to the next Cell(according to direction).
+	 * @param factory Level Factory.
+	 * @param prop Property that needs to be moved.
+	 * @param direction Direction headed to.
+	 * @return  True if there is at least one element with the prop.
+	 * 			False if there is no element with the prop.
 	 */
-	public EventBabaGame mooveProp(EntityFactory factory,PropertyEnum prop,DirectionEnum direction) {
+	public EventBabaGame moveProp(EntityFactory factory, PropertyEnum prop, DirectionEnum direction) {
 		ArrayList<Element> list =new ArrayList<>();
-		for (int idElem  :getElemnwithProp(prop)) {
+		for (int idElem  : getElemWithProp(prop)) {
 			list.addAll(factory.getElementHashMap().get(idElem));
 		}
 		if(prop != null) {
 			for(Element el : list) {
-				if(moove(el,direction) == EventBabaGame.Win)
+				if(move(el,direction) == EventBabaGame.Win)
 						return EventBabaGame.Win;
 			}
 			return EventBabaGame.Good;
@@ -220,18 +203,18 @@ public class Level {
 	
 	
 	/**
-	 * destroy the Entity ent from the Level and the factory
-	 * @param factory
-	 * @param ent
+	 * Destroy the Entity 'ent' from the Level and the factory.
+	 * @param factory Game level factory.
+	 * @param ent Entity to remove.
 	 */
-	public void removeEntityfromEveryWhere(EntityFactory factory, Entity ent) {
+	public void removeEntityFromEveryWhere(EntityFactory factory, Entity ent) {
 		if (ent == null) return;
 		if(ent instanceof  Element) {
 			//remove ent from the factory
 			if(factory.getElementHashMap().containsKey(((Element) ent).getElemID())) {
 				ArrayList<Element> list = factory.getElementHashMap().get(((Element) ent).getElemID());
 				if(list.size() == 1) {
-					//check if there is a prop associed and remove it from level.propertyHashMap
+					//check if there is a prop associated and remove it from level.propertyHashMap
 					if(this.getPropertyHashMap().containsKey(((Element) ent).getElemID())) {
 						this.getPropertyHashMap().remove(((Element) ent).getElemID()) ;
 					}
@@ -245,6 +228,9 @@ public class Level {
 		}
 	}
 
+	/**
+	 * Removes all entity inside 'toDestroy' using removeEntityFromEveryWhere
+	 */
 	public void removeFromToDestroy(){
 		Entity target = null;
 		for(Integer id : toDestroy){
@@ -255,13 +241,16 @@ public class Level {
 					}
 				}
 			}
-			removeEntityfromEveryWhere(factory, target);
+			removeEntityFromEveryWhere(factory, target);
 		}
 		toDestroy.clear();
 	}
-	
-	
-	
+
+	/**
+	 * Spawn the entity specified in the formatted data string.
+	 * @param factory Game level Factory.
+	 * @param data Formatted data extracted from level file.
+	 */
 	public void spawnEntity(EntityFactory factory,String[] data) throws Exception {
 		switch (atoi(data[0])){
 			case 1://Element
@@ -290,7 +279,11 @@ public class Level {
 		}
 	}
 
-	
+	/**
+	 * Load the 'levelNumber' level.
+	 * @param levelNumber Level ID used in the level file name.
+	 * @param factory Game level factory.
+	 */
 	public void LoadLevel(int levelNumber, EntityFactory factory){
 		try {
 			String row;
@@ -298,11 +291,11 @@ public class Level {
 			BufferedReader csvReader = new BufferedReader(new FileReader(filepath));
 			row = csvReader.readLine();
 			String[] data = row.split(",");
-			this.x = atoi(data[0]);
-			this.y = atoi(data[1]);
-			plateau = new Cell[this.x][this.y];
-			for(int i = 0 ; i < x ; i++) {
-				for(int j = 0 ; j < y ; j++) { plateau[i][j] = new Cell(this,i,j); }
+			int x = atoi(data[0]);
+			int y = atoi(data[1]);
+			plateau = new Cell[x][y];
+			for(int i = 0; i < x; i++) {
+				for(int j = 0; j < y; j++) { plateau[i][j] = new Cell(this,i,j); }
 			}
 			propertyHashMap = new HashMap<>() ;
 			while((row = csvReader.readLine()) != null){
@@ -318,6 +311,11 @@ public class Level {
 		}
 	}
 
+	/**
+	 * Turn the 'nb' string to an int version.
+	 * @param nb String containing a number.
+	 * @return Int corresponding to nb.
+	 */
 	int atoi(String nb){
 		int result = 0;
 		for (int i = 0; i < nb.length(); i++)
@@ -325,8 +323,13 @@ public class Level {
 		return result;
 	}
 
+	/**
+	 * Notify if the game is lost.
+	 * @param factory Game level factory.
+	 * @return Defeat if the game is lost, Good any other way.
+	 */
 	public EventBabaGame isLost(EntityFactory factory){
-		for (int idElem  :getElemnwithProp(PropertyEnum.You)) {
+		for (int idElem  : getElemWithProp(PropertyEnum.You)) {
 			if(factory.getElementHashMap().get(idElem) != null && factory.getElementHashMap().get(idElem).size() > 0)
 				return EventBabaGame.Good;
 		}
@@ -335,24 +338,29 @@ public class Level {
 		return EventBabaGame.Defeat;
 	}
 
-	public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
-		//check what happen when entity will go to the Cell x,y
-		//if win
+	/**
+	 * Check what happen when entity will go to the Cell x,y.
+	 * @param entityEntering Entity that enters the cell.
+	 * @param x X-axis coordinate of the cell's position.
+	 * @param y Y-axis coordinate of the cell's position.
+	 * @return Stop if the entity can't move, Win if game is won, Defeat if it is lost, else returns Good.
+	 */
+	public EventBabaGame atEnterInCell(Entity entityEntering, int x, int y) {
 		if(testOutOfBound(x,y)){
 			return EventBabaGame.Stop;
 		}
 		List<EventBabaGame> listEvent = new ArrayList<>();
 		
-		for(Entity entiCell : this.getPlateau()[x][y].getContent()) {
-			listEvent.add(entiCell.isEnteredBy(entityEntering));
+		for(Entity entityCell : this.getPlateau()[x][y].getContent()) {
+			listEvent.add(entityCell.isEnteredBy(entityEntering));
 		}
 		if(listEvent.contains(EventBabaGame.Defeat)) {
 			this.toDestroy.add(entityEntering.getEntityId());
 			return EventBabaGame.Destroy;
 		}
 		if(listEvent.contains(EventBabaGame.DestroyAll)) {
-			for(Entity entiCell : this.getPlateau()[x][y].getContent()) {
-				this.toDestroy.add(entiCell.getEntityId());
+			for(Entity entityCell : this.getPlateau()[x][y].getContent()) {
+				this.toDestroy.add(entityCell.getEntityId());
 			}
 			return EventBabaGame.DestroyAll;
 		}
@@ -365,41 +373,30 @@ public class Level {
 		return EventBabaGame.Good;
 	}
 
+	/**
+	 * PropertyHasMap getter.
+	 * @return PropertyHashMap.
+	 */
 	public Map<Integer,ArrayList<PropertyEnum>> getPropertyHashMap() {
 		return propertyHashMap;
 	}
 
 
-
+	/**
+	 * Factory getter.
+	 * @return Factory.
+	 */
 	public EntityFactory getFactory() {
 		return factory;
 	}
 
 
-
+	/**
+	 * Plateau getter.
+	 * @return Plateau.
+	 */
 	public Cell[][] getPlateau() {
 		return plateau;
 	}
-	public void OperatorInteract(Operator op){
-        OperatorAux(op,1,0);
-        OperatorAux(op,0,1);
-    }
-    
-    private void OperatorAux(Operator op,int x,int y){
-        if (!testOutOfBound(op.getx()-x, op.gety()-y)){
-            for(Entity e : this.plateau[op.getx()-x][op.gety()-y].getContent()){
-                if (e.getClass() == Name.class){
-                    if(!testOutOfBound(op.getx()+x, op.gety()+y)){
-                        for(Entity f : this.plateau[op.getx()+x][op.gety()+y].getContent()){
-                            if (f.getClass() == Property.class){
-                                this.addPropInMap(PropertyEnum.valueOf(f.getEntityName()),
-                                        ElementEnum.valueOf(e.getEntityName()).getElemID());
-                                System.out.println(f.getEntityName() + e.getEntityName());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+
 }

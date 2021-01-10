@@ -14,8 +14,6 @@ public abstract class Entity {
 	private final int entityId;
 	private final Level level;
 
-	private String entityName;
-	
 	public boolean isText() {
 		return false;
 	}
@@ -33,10 +31,7 @@ public abstract class Entity {
 		this.entityId = entityId;
 		this.level = level;
 	}
-	public String getEntityName(){
-		return this.entityName;
-		}
-	
+
 	/**
 	 * Getter this.level
 	 * @return this.level
@@ -70,7 +65,6 @@ public abstract class Entity {
 	
 	/**
 	 * Setter this.x
-	 * @return this.x
 	 */
 	public void setx(int x2) {
 		this.x = x2;
@@ -85,7 +79,6 @@ public abstract class Entity {
 	}
 	/**
 	 * Setter this.y
-	 * @return this.y
 	 */
 	public void sety(int y2) {
 		this.y = y2;
@@ -119,9 +112,5 @@ public abstract class Entity {
 	public abstract boolean isPush();
 	public abstract boolean isStop();
 
-	public boolean isName() {
-		return false;
-	}
-	
-	
+
 }

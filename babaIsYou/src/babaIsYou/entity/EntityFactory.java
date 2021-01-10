@@ -27,16 +27,14 @@ public class EntityFactory{
 		return ret;
 	}
 	
-	public Operator create(OperatorEnum op) throws Exception {
-		switch(op) {
-		case Is:
-			Operator ret = new OperatorIs(op.getimageID(),idEntity,op.getElemID(),level);
+	public Operator create(OperatorEnum op) {
+		if (op == OperatorEnum.Is) {
+			Operator ret = new OperatorIs(op.getimageID(), idEntity, op.getElemID(), level);
 			idEntity += 1;
 			return ret;
-		default:
-			throw new RuntimeException("Operator not Recognized");
 		}
-		
+		throw new RuntimeException("Operator not Recognized");
+
 	}
 	public Element create(ElementEnum el) {//i have to keep an ArrayLiost of all object.
 		ArrayList<Element> list;
@@ -44,19 +42,18 @@ public class EntityFactory{
 		idEntity += 1;
 		if(this.getElementHashMap().containsKey(el.getElemID())) {
 			list = this.getElementHashMap().get(el.getElemID());
-			list.add(ret);
 		}
 		else {
 			list = new ArrayList<>();
-			list.add(ret);
 		}
+		list.add(ret);
 		getElementHashMap().put(el.getElemID(),list );
 		return ret;
 	}
 		
 		
 	public Property create(PropertyEnum prop) {
-		Property ret = new Property(prop.getimageID(),this.idEntity,prop.getElemID(),level, prop);
+		Property ret = new Property(prop.getimageID(),this.idEntity, level, prop);
 		idEntity += 1;
 		return ret;
 	}

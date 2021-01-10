@@ -1,11 +1,6 @@
 package babaIsYou.entity;
 
-import java.security.CryptoPrimitive;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import babaIsYou.Level;
-import babaIsYou.entity.entityEnum.PropertyEnum;
 
 public class Name extends Text {
 	private final int objectId;
@@ -21,7 +16,7 @@ public class Name extends Text {
 	}
 	
 	/**
-	 * 
+	 * Notifies the name in case something changes in the neighbours.
 	 * @param x
 	 * @param y
 	 * @param text
@@ -52,15 +47,14 @@ public class Name extends Text {
 			if(lign[0] != null && lign[1] != null && lign[0].isOperator() && lign[1].isProperty()) {
 				
 		
-				this.getLevel().removePropInMap(((Property)text).getPropertyEnum(), this.linkId);				;//retirer prop
+				this.getLevel().removePropInMap(((Property)lign[1]).getPropertyEnum(), this.linkId);				;//retirer prop
 				System.out.println("supp de prop " + this.linkId);
 			}
 			lign[placement]= null;
 
 		}
 	}
-	
-	
+
 	@Override
 	public void exiting(int x, int y) {
 		notifyMe(x+1, y, this, false);
@@ -82,12 +76,5 @@ public class Name extends Text {
 		this.getLevel().subscribeTo(this,x+2,y);
 		}
 
-	@Override
-	public boolean isName() {
-		return true;
-	}
-
-	
-	
 
 }
