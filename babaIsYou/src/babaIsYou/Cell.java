@@ -150,7 +150,6 @@ public class Cell {
 			this.level.pushedIn(elem.getx() + direction.getmoveX(),elem.gety() + direction.getmoveY(),elem, direction);
 						
 		}
-		//notifier liste listlllener
 		
 		return true;
 		
@@ -169,7 +168,6 @@ public class Cell {
 		this.level.removeEntityInCell(entity);
 		this.level.addEntityInCell(entity,x,y);
 		this.level.atEnterInCell(entity,x,y,entity.getEntityId());
-//		this.level.removeFromToDestroy();
 
 		for (Entity elem : copy) {
 			this.level.pushedIn(elem.getx() + direction.getmoveX(),elem.gety() + direction.getmoveY(),elem, direction);

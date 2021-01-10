@@ -52,51 +52,14 @@ public class Name extends Text {
 			if(lign[0] != null && lign[1] != null && lign[0].isOperator() && lign[1].isProperty()) {
 				
 		
-				this.getLevel().removePropInMap(((Property)lign[1]).getPropertyEnum(), this.linkId);				;//retirer prop
+				this.getLevel().removePropInMap(((Property)text).getPropertyEnum(), this.linkId);				;//retirer prop
 				System.out.println("supp de prop " + this.linkId);
 			}
 			lign[placement]= null;
 
 		}
-		
-		
-		
-//		
-//		if(enter) {
-//			System.out.println("if");
-//			for(Entity entity : this.getLevel().getPlateau()[this.getx()+1][this.gety()].getContent() ) {
-//				System.out.println("elem : "+ entity);
-//				if(entity.isOperator()) {
-//						for(Entity entity2 : this.getLevel().getPlateau()[this.getx()+2][this.gety()].getContent()) {
-//							if(entity.isProperty()) {
-//									this.getLevel().addPropInMap(((Property)entity2).getPropertyEnum() , this.objectId);
-//									//add the new property in the Level
-//									System.out.println("notify me "+((Property)entity2).getPropertyEnum() + this.objectId);
-//								}
-//								
-//						
-//					}
-//				}
-//			}
-//			System.out.println("fin prem for");
-//		}
-//			
-//		else {
-//			System.out.println("else");
-//			/*
-//			for(Entity entity : this.getLevel().getPlateau()[this.getx()][this.gety()+1].getContent() ) {
-//			if(entity.isText()) {
-//				if(entity.isOperator()) {
-//					if(text.isProperty()) {
-//						this.getLevel().removePropInMap((Property)text, this.objectId);						
-//						//remove the prop from Level
-//						
-//					}
-//				}
-//			}
-//		}*/
-//		}
 	}
+	
 	
 	@Override
 	public void exiting(int x, int y) {
@@ -118,27 +81,7 @@ public class Name extends Text {
 		this.getLevel().subscribeTo(this,x+1,y);
 		this.getLevel().subscribeTo(this,x+2,y);
 		}
-//	@Override
-//	public void updateProp() {
-//		for(Entity entity : this.getLevel().plateau[this.getx()][this.gety()+1].getContent() ) {
-//			if(entity.isText()) {
-//				if(entity.isOperator()) {
-//					for(Entity entity2 : this.getLevel().plateau[this.getx()][this.gety()+2].getContent()) {
-//						if(entity.isText()) {
-//							if(entity.isProperty()) {
-//								this.getLevel().addPropInMap((PropertyEnum.entity2, 2);
-//							}
-//								//add property in this.level.
-//								//	HashMap<Integer,ArrayList<PropertyEnum>> propertyHashMap
-//								//addPropInMap(entity2, this.getIdElem( ) 
-//							}
-//					}
-//				}
-//			}
-//		}
-//		//if(this.getLevel().plateau[x][y+1].getContent().isText())
-//	//check if  there is a line?
-//	}
+
 	@Override
 	public boolean isName() {
 		return true;

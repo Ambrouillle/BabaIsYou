@@ -25,34 +25,13 @@ public class Level {
 		this.LoadLevel(id, getFactory());
 	}
 	
-	/*public void atStart() {
-		for(int i = 0 ; i < x ; i++) {
-			for (int j = 0 ;  j < y; j++) {
-				for (Entity ent : this.plateau[i][j].getContent()) {
-					if(ent.isName()) {
-						for (Entity ent2 : this.plateau[i+1][j].getContent()) {
-							if(ent2.isOperator()) {
-								for (Entity ent3 : this.plateau[i+2][j].getContent()) {
-									if(ent2.isProperty()) {
-										addPropInMap((Property)ent3), ent.getEntityId());
-										//addPropInMap((Property)ent3).getPropertyEnum(), ent.objectId());
-									}
-							}
-						
-					}
-					
-				}
-			}
-		}
-	}
-		
-	}
-			
-		
-	}*/
-	
-	
-	
+	/**
+	 * Function subscribing the 2 Cells on the Name's right and the 2 Cells under the Name
+	 * @param name
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean subscribeTo(Name name, int x,int y) {
 		if(testOutOfBound(x, y)) {
 			return false;
@@ -61,6 +40,14 @@ public class Level {
 		return true;
 	}
 	
+	
+	/**
+	 * Function Unsubscribing the 2 Cells on the Name's right and the 2 Cells under the Name
+	 * @param name
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean unSubscribeTo(Name name, int x,int y) {
 		if(testOutOfBound(x, y)) {
 			return false;
@@ -272,43 +259,9 @@ public class Level {
 		}
 		toDestroy.clear();
 	}
-	/*public void loadLevel(int levelNumber, EntityFactory factory){
-		try {
-			String row;
-			String filepath = "Ressources" + File.separator + levelNumber + ".csv";
-			BufferedReader csvReader = new BufferedReader(new FileReader(filepath));
-			row = csvReader.readLine();
-			String[] data = row.split(",");
-			this.x = atoi(data[0]);
-			this.y = atoi(data[1]);
-			plateau = new Cell[this.x][this.y];
-			for(int i = 0 ; i < x ; i++) {
-				for(int j = 0 ; j < y ; j++) {
-					getPlateau()[i][j] = new Cell(this,i,j);
-				}
-			}
-			propertyHashMap = new HashMap<>() ;
-			while((row = csvReader.readLine()) != null){
-				data = row.split(",");
-				switch (atoi(data[0])) {
-//Element
-					case 1 -> this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
-//Property
-					case 2 -> this.addEntityInCell(factory.create(PropertyEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
-//Name
-					case 3 -> this.addEntityInCell(factory.create(NameEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
-//Not Working Operator
-//					case 4 -> factory.create(OperatorEnum.valueOf(data[1]));
-				}
-
-			}
-		}
-		catch(IOException ex){
-			System.err.println("An exception occured");
-			ex.printStackTrace();
-		}
-	}
-	*/
+	
+	
+	
 	public void spawnEntity(EntityFactory factory,String[] data) throws Exception {
 		switch (atoi(data[0])){
 			case 1://Element
@@ -328,7 +281,6 @@ public class Level {
 			case 3://Name
 				Name name = factory.create(NameEnum.valueOf(data[1]));
 				this.addEntityInCell(name,atoi(data[2]),atoi(data[3]));
-//				this.subscribeTo(name, x, y);
 				break;
 				
 			case 4://Operator
@@ -374,16 +326,6 @@ public class Level {
 	}
 
 	public EventBabaGame isLost(EntityFactory factory){
-//		ArrayList<Element> list =new ArrayList<>();
-//		for (int idElem  :getElemnwithProp(PropertyEnum.You)) {
-//			list.addAll(factory.getElementHashMap().get(idElem));
-//		}
-//
-//		if (list.isEmpty()){
-//			return EventBabaGame.Defeat;
-//		}
-//		return EventBabaGame.Good;
-		int count;
 		for (int idElem  :getElemnwithProp(PropertyEnum.You)) {
 			if(factory.getElementHashMap().get(idElem) != null && factory.getElementHashMap().get(idElem).size() > 0)
 				return EventBabaGame.Good;
