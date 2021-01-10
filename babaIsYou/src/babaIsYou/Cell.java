@@ -29,8 +29,8 @@ public class Cell {
 			if(entity.isText())
 				name.notifyMe(this.x, this.y, entity, true);
 		}
+
 		
-		//TODO: notifier l'element ajouté pour tt les text 
 	}
 	
 	public void unSubscribe(Name name) {

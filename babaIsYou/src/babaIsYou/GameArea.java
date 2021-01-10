@@ -90,15 +90,18 @@ public class GameArea {
     public int run(int id){
         int returnVal;
         lvl = new Level(id); // creation lvl
-        /*
-        lvl.addPropInMap(PropertyEnum.You, ElementEnum.Baba.getElemID());
-        lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
+        System.out.println(lvl.getPropertyHashMap());
+        
+//        lvl.addPropInMap(PropertyEnum.You, ElementEnum.Baba.getElemID());
+//        
+//        lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
         lvl.addPropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
-        lvl.addPropInMap(PropertyEnum.Win,ElementEnum.Flag.getElemID());
-        lvl.addPropInMap(PropertyEnum.Hot,ElementEnum.Lava.getElemID());
-        lvl.addPropInMap(PropertyEnum.Melt,ElementEnum.Baba.getElemID());
-        lvl.addPropInMap(PropertyEnum.Stop,ElementEnum.Wall.getElemID());
-        */
+        lvl.removePropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
+//        lvl.addPropInMap(PropertyEnum.Win,ElementEnum.Flag.getElemID());
+//        lvl.addPropInMap(PropertyEnum.Hot,ElementEnum.Lava.getElemID());
+//        lvl.addPropInMap(PropertyEnum.Melt,ElementEnum.Baba.getElemID());
+//        lvl.addPropInMap(PropertyEnum.Stop,ElementEnum.Wall.getElemID());
+        
         EventBabaGame ev;
 
         setSize();

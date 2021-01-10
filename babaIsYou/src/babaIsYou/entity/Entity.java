@@ -101,6 +101,8 @@ public abstract class Entity {
 	
 	public EventBabaGame isEnteredBy(Entity newElem) {
 		List<PropertyEnum> props = this.getProperties();
+		if(props == null)
+			return EventBabaGame.Good;
 		if(props.contains(PropertyEnum.Defeat) && newElem.isYou() )
 			return EventBabaGame.Defeat;
 		if(props.contains(PropertyEnum.Sink))
@@ -121,6 +123,10 @@ public abstract class Entity {
 	public abstract boolean isYou();
 	public abstract boolean isPush();
 	public abstract boolean isStop();
+
+	public boolean isName() {
+		return false;
+	}
 	
 	
 }

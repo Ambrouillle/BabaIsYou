@@ -22,7 +22,7 @@ public class EntityFactory{
 		setElementHashMap(new HashMap<>()) ;
 	}
 	public Name create(NameEnum name) {
-		Name ret = new Name(name.getimageID(),idEntity,name.getElemID(),level);
+		Name ret = new Name(name.getimageID(),idEntity,name.getElemID(),name.getLinkId(),level);
 		idEntity += 1;
 		return ret;
 	}

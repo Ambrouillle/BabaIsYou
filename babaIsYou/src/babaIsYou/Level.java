@@ -25,13 +25,39 @@ public class Level {
 		this.LoadLevel(id, getFactory());
 	}
 	
+	/*public void atStart() {
+		for(int i = 0 ; i < x ; i++) {
+			for (int j = 0 ;  j < y; j++) {
+				for (Entity ent : this.plateau[i][j].getContent()) {
+					if(ent.isName()) {
+						for (Entity ent2 : this.plateau[i+1][j].getContent()) {
+							if(ent2.isOperator()) {
+								for (Entity ent3 : this.plateau[i+2][j].getContent()) {
+									if(ent2.isProperty()) {
+										addPropInMap((Property)ent3), ent.getEntityId());
+										//addPropInMap((Property)ent3).getPropertyEnum(), ent.objectId());
+									}
+							}
+						
+					}
+					
+				}
+			}
+		}
+	}
+		
+	}
+			
+		
+	}*/
+	
 	
 	
 	public boolean subscribeTo(Name name, int x,int y) {
 		if(testOutOfBound(x, y)) {
 			return false;
 		}
-		getPlateau()[x][y].subscribe(name);
+		plateau[x][y].subscribe(name);
 		return true;
 	}
 	
@@ -39,7 +65,7 @@ public class Level {
 		if(testOutOfBound(x, y)) {
 			return false;
 		}
-		getPlateau()[x][y].unSubscribe(name);
+		plateau[x][y].unSubscribe(name);
 		return true;
 	}
 	
@@ -117,7 +143,7 @@ public class Level {
 	 * @param prop
 	 * @param elem
 	 */
-	public void removePropInMap(Property prop,int idElement ) {
+	public void removePropInMap(PropertyEnum prop,int idElement ) {
 		if(this.getPropertyHashMap().containsKey(idElement)) {
 			if(this.getPropertyHashMap().get(idElement).contains(prop)) {
 				this.getPropertyHashMap().get(idElement).remove(prop);
@@ -302,13 +328,12 @@ public class Level {
 			case 3://Name
 				Name name = factory.create(NameEnum.valueOf(data[1]));
 				this.addEntityInCell(name,atoi(data[2]),atoi(data[3]));
-				this.subscribeTo(name, x, y);
+//				this.subscribeTo(name, x, y);
 				break;
+				
 			case 4://Operator
 				Operator op = factory.create(OperatorEnum.valueOf(data[1]));
-				//this.plateau[atoi(data[2])][atoi(data[3])].subscribe(op);
 				this.addEntityInCell(op,atoi(data[2]),atoi(data[3]));
-				this.OperatorInteract(op);
 				break;
 		}
 	}
@@ -349,15 +374,23 @@ public class Level {
 	}
 
 	public EventBabaGame isLost(EntityFactory factory){
-		ArrayList<Element> list =new ArrayList<>();
+//		ArrayList<Element> list =new ArrayList<>();
+//		for (int idElem  :getElemnwithProp(PropertyEnum.You)) {
+//			list.addAll(factory.getElementHashMap().get(idElem));
+//		}
+//
+//		if (list.isEmpty()){
+//			return EventBabaGame.Defeat;
+//		}
+//		return EventBabaGame.Good;
+		int count;
 		for (int idElem  :getElemnwithProp(PropertyEnum.You)) {
-			list.addAll(factory.getElementHashMap().get(idElem));
+			if(factory.getElementHashMap().get(idElem) != null && factory.getElementHashMap().get(idElem).size() > 0)
+				return EventBabaGame.Good;
 		}
 
-		if (list.isEmpty()){
-			return EventBabaGame.Defeat;
-		}
-		return EventBabaGame.Good;
+		
+		return EventBabaGame.Defeat;
 	}
 
 	public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
@@ -406,25 +439,25 @@ public class Level {
 		return plateau;
 	}
 	public void OperatorInteract(Operator op){
-		OperatorAux(op,1,0);
-		OperatorAux(op,0,1);
-	}
-	
-	private void OperatorAux(Operator op,int x,int y){
-		if (!testOutOfBound(op.getx()-x, op.gety()-y)){
-			for(Entity e : this.plateau[op.getx()-x][op.gety()-y].getContent()){
-				if (e.getClass() == Name.class){
-					if(!testOutOfBound(op.getx()+x, op.gety()+y)){
-						for(Entity f : this.plateau[op.getx()+x][op.gety()+y].getContent()){
-							if (f.getClass() == Property.class){
-								this.addPropInMap(PropertyEnum.valueOf(f.getEntityName()),
-										ElementEnum.valueOf(e.getEntityName()).getElemID());
-								System.out.println(f.getEntityName() + e.getEntityName());
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+        OperatorAux(op,1,0);
+        OperatorAux(op,0,1);
+    }
+    
+    private void OperatorAux(Operator op,int x,int y){
+        if (!testOutOfBound(op.getx()-x, op.gety()-y)){
+            for(Entity e : this.plateau[op.getx()-x][op.gety()-y].getContent()){
+                if (e.getClass() == Name.class){
+                    if(!testOutOfBound(op.getx()+x, op.gety()+y)){
+                        for(Entity f : this.plateau[op.getx()+x][op.gety()+y].getContent()){
+                            if (f.getClass() == Property.class){
+                                this.addPropInMap(PropertyEnum.valueOf(f.getEntityName()),
+                                        ElementEnum.valueOf(e.getEntityName()).getElemID());
+                                System.out.println(f.getEntityName() + e.getEntityName());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
