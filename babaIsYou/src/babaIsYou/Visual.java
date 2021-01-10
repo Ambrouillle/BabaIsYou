@@ -45,7 +45,6 @@ public class Visual {
 
         void DrawImg(ApplicationContext context, int id, float x, float y){
             Image img;
-            System.out.println(imagesSize);
             img = loadImage(id);
 
             context.renderFrame(graphics -> graphics.drawImage(img, (int)x,(int)y,imagesSize,imagesSize,null));
@@ -60,14 +59,14 @@ public class Visual {
         void DrawPLayableFIeld(ApplicationContext context, int bOriginX, int bOriginy, Level lvl){
             context.renderFrame(graphics -> {
                 graphics.setColor(new Color(.05f,.05f,.05f));
-                graphics.fill(new  Rectangle2D.Float(bOriginX, bOriginy, lvl.plateau[0].length*imagesSize, lvl.plateau.length*imagesSize));
+                graphics.fill(new  Rectangle2D.Float(bOriginX, bOriginy, lvl.getPlateau()[0].length*imagesSize, lvl.getPlateau().length*imagesSize));
             });
         }
 
         void RefreshScreen(ApplicationContext context, int width, int height, Level lvl, int boardOriginx, int boardOriginy){
             this.ClearScreen(context, width,height);
             this.DrawPLayableFIeld(context,boardOriginx,boardOriginy,lvl);
-            for (Cell[] plt : lvl.plateau){
+            for (Cell[] plt : lvl.getPlateau()){
                 for (Cell c : plt) {
                     for (Entity e : c.getContent()) {
                         this.DrawImg(context, e.getImageId(), boardOriginx +(e.getx()*imagesSize), boardOriginy +(e.gety()*imagesSize));

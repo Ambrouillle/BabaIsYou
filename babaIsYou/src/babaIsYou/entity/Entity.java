@@ -13,7 +13,18 @@ public abstract class Entity {
 	private int y;
 	private final int entityId;
 	private final Level level;
+
+	private String entityName;
+	
 	public boolean isText() {
+		return false;
+	}
+	
+	public boolean isOperator() {
+		return false;
+	}
+	
+	public boolean isProperty() {
 		return false;
 	}
 	
@@ -22,6 +33,10 @@ public abstract class Entity {
 		this.entityId = entityId;
 		this.level = level;
 	}
+	public String getEntityName(){
+		return this.entityName;
+		}
+	
 	/**
 	 * Getter this.level
 	 * @return this.level
@@ -76,38 +91,34 @@ public abstract class Entity {
 		this.y = y2;
 	}
 	
-	public void isRemove(int x, int y) {
-		//TODO:
-	}
+	public void exiting(int x, int y) {
+			}
 	
-	public void enter(int x, int y) {
-		//TODO:
-	}
+	public void entering(int x, int y) {
+			}
 	
-	public void updateProp() {
-		//TODO:
-	}
+
 	
 	public EventBabaGame isEnteredBy(Entity newElem) {
-		List<PropertyEnum> props = this.getPropertys();
-		if(props.contains(PropertyEnum.Defeat))
+		List<PropertyEnum> props = this.getProperties();
+		if(props.contains(PropertyEnum.Defeat) && newElem.isYou() )
 			return EventBabaGame.Defeat;
 		if(props.contains(PropertyEnum.Sink))
 			return EventBabaGame.DestroyAll;
-		if(props.contains(PropertyEnum.Hot) && newElem.getPropertys().contains(PropertyEnum.Melt))
+		if(props.contains(PropertyEnum.Hot) && newElem.getProperties().contains(PropertyEnum.Melt))
 			return EventBabaGame.Destroy;
 		if(props.contains(PropertyEnum.Win))
 			return EventBabaGame.Win;
 		return EventBabaGame.Good;
 	}
-	protected abstract List<PropertyEnum> getPropertys();
+	protected abstract List<PropertyEnum> getProperties();
 //	public abstract boolean isMelt();
 //	public abstract boolean isHot();
 //	public abstract boolean isSink();
 //	public abstract boolean isDefeat();
 //	public abstract boolean isWin();
 	
-	
+	public abstract boolean isYou();
 	public abstract boolean isPush();
 	public abstract boolean isStop();
 	

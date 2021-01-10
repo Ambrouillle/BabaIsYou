@@ -20,15 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameArea {
-    ApplicationContext context;
-    float Width;
-    float Height;
-    Level lvl;
-    int lvlx;
-    int lvly;
-    int boardOriginx;
-    int boardOriginy;
-    Visual.Area area;
+    private ApplicationContext context;
+    private float Width;
+    private float Height;
+    private Level lvl;
+    private int lvlx;
+    private int lvly;
+    private int boardOriginx;
+    private int boardOriginy;
+    private Visual.Area area;
 
     GameArea(ApplicationContext context){
         this.context = context;
@@ -44,38 +44,44 @@ public class GameArea {
 
         if (List.of("UP","DOWN","LEFT","RIGHT").contains(event.getKey().name())) {
 
-            ArrayList<Element> list = new ArrayList<>();
-        	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Baba.getElemID()));
-        	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Lava.getElemID()));
-        	System.out.println(lvl.factory.getElementHashMap().get(ElementEnum.Baba.getElemID()).size() );
+//            ArrayList<Element> list = new ArrayList<>();
             dir = DirectionEnum.valueOf(event.getKey().name());
-            for(int elemId: lvl.getElemnwithProp(PropertyEnum.You)) {
-            	list.addAll(lvl.factory.getElementHashMap().get(elemId));
-            }
-
-            for(Entity en : list) {
-            	
-                ev = lvl.moove(en, dir);
-                if (ev == EventBabaGame.Defeat){
-                	lvl.mooveProp(factory, PropertyEnum.You, dir);
-                	return EventBabaGame.Defeat;
-                }
-                if(ev== EventBabaGame.Win) {
-                	return EventBabaGame.Win;
-                }
-            }
-
-            if (lvl.toDestroy != null) {
-                    lvl.removeFromToDestroy(factory);
-            }
-            return lvl.isLost(factory) == EventBabaGame.Good ? ev : EventBabaGame.Defeat;
+            
+            EventBabaGame turnResult = lvl.mooveProp(factory, PropertyEnum.You, dir);
+            
+            lvl.removeFromToDestroy();
+            
+            
+            return turnResult;
+            
+//            for(int elemId: lvl.getElemnwithProp(PropertyEnum.You)) {
+//            	list.addAll(lvl.getFactory().getElementHashMap().get(elemId));
+//            }
+//
+//            for(Entity en : list) {
+//            	
+//                ev = lvl.moove(en, dir);
+//                if (ev == EventBabaGame.Defeat){
+//                	//lvl.mooveProp(factory, PropertyEnum.You, dir);
+//                	return EventBabaGame.Defeat;
+//                }
+//                if(ev== EventBabaGame.Win) {
+//                	return EventBabaGame.Win;
+//                }
+//            }
+//
+//            if (lvl.toDestroy != null) {
+//                    lvl.removeFromToDestroy(factory);
+//            }
+//            return lvl.isLost(factory) == EventBabaGame.Good ? ev : EventBabaGame.Defeat;
+           
         }
         return EventBabaGame.Good;
     }
 
     public void setSize(){
-        this.lvly = lvl.plateau.length ;
-        this.lvlx = lvl.plateau[0].length;
+        this.lvly = lvl.getPlateau().length ;
+        this.lvlx = lvl.getPlateau()[0].length;
         area = new Visual.Area(this.Height/lvlx, this.Width/lvly);
         this.boardOriginx = (int)(this.Width / 2) - (area.imagesSize * lvly/2);
         this.boardOriginy = (int)(this.Height / 2) - (area.imagesSize * lvlx/2);
@@ -84,6 +90,7 @@ public class GameArea {
     public int run(int id){
         int returnVal;
         lvl = new Level(id); // creation lvl
+        /*
         lvl.addPropInMap(PropertyEnum.You, ElementEnum.Baba.getElemID());
         lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
         lvl.addPropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
@@ -91,6 +98,7 @@ public class GameArea {
         lvl.addPropInMap(PropertyEnum.Hot,ElementEnum.Lava.getElemID());
         lvl.addPropInMap(PropertyEnum.Melt,ElementEnum.Baba.getElemID());
         lvl.addPropInMap(PropertyEnum.Stop,ElementEnum.Wall.getElemID());
+        */
         EventBabaGame ev;
 
         setSize();
@@ -108,8 +116,8 @@ public class GameArea {
             }
             if (ev != EventBabaGame.Defeat && ev != EventBabaGame.Win) {
                 if (action == Action.KEY_PRESSED) {
-                    ev = checkMovement(event, lvl.factory);
-                    if (lvl.isLost(lvl.factory) == EventBabaGame.Defeat) {
+                    ev = checkMovement(event, lvl.getFactory());
+                    if (lvl.isLost(lvl.getFactory()) == EventBabaGame.Defeat) {
                         ev = EventBabaGame.Defeat;
                     }
                     area.RefreshScreen(context, (int) this.Width, (int) this.Height, lvl, boardOriginx, boardOriginy);

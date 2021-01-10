@@ -56,7 +56,7 @@ public class EntityFactory{
 		
 		
 	public Property create(PropertyEnum prop) {
-		Property ret = new Property(prop.getimageID(),this.idEntity,prop.getElemID(),level);
+		Property ret = new Property(prop.getimageID(),this.idEntity,prop.getElemID(),level, prop);
 		idEntity += 1;
 		return ret;
 	}

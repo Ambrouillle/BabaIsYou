@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import babaIsYou.entity.Entity;
+import babaIsYou.entity.Name;
 import babaIsYou.entity.Operator;
 import babaIsYou.entity.entityEnum.DirectionEnum;
  
 public class Cell {
 	private ArrayList<Entity> content;
 	private Level level;
-	private ArrayList<Operator> listener;
+	private ArrayList<Name> listener;
 	private int x;
 	private int y;
 	
@@ -22,34 +23,50 @@ public class Cell {
 		this.y = y;
 	}
 	
-	public void subscribe(Operator operator) {
-		listener.add(operator);
+	public void subscribe(Name name) {
+		listener.add(name);
+		for (Entity entity : content) {
+			if(entity.isText())
+				name.notifyMe(this.x, this.y, entity, true);
+		}
+		
+		//TODO: notifier l'element ajouté pour tt les text 
 	}
 	
-	public void unSubscribe(Operator operator) {
-		listener.remove(operator);
+	public void unSubscribe(Name name) {
+		listener.remove(name);
 	}
 	
 	/**
-	 * Function adding the Entity entity from this.Cell
+	 * Function adding the Entity entity to this.Cell
 	 * @param entity
 	 * @return true if the add has been done
 	 * 		   false if not
 	 */
 	public void add(Entity entity) {
 		getContent().add(entity);
-		for (Operator operator : listener) {
-			
+		entity.entering(x,y);
+		if(entity.isText()) {
+			for (Name name : listener) {
+				name.notifyMe(this.x, this.y, entity, true);
+			}
 		}
 		
 	}
 	/**
-	 * Function removing the Entity entity from this.Cell
+	 * Function removing the Entity entity to this.Cell
 	 * @param entity
 	 * @return true if the removal has been done
 	 * 		   false if not
 	 */
 	public boolean remove(Entity entity) {
+		entity.exiting(x, y);
+		if(entity.isText()) {
+			for (Name name : listener) {
+				name.notifyMe(this.x, this.y, entity, false);
+			}
+		}
+		
 		return getContent().remove(entity);
 		
 		
@@ -152,7 +169,7 @@ public class Cell {
 		this.level.removeEntityInCell(entity);
 		this.level.addEntityInCell(entity,x,y);
 		this.level.atEnterInCell(entity,x,y,entity.getEntityId());
-		this.level.removeFromToDestroy(level.factory);
+//		this.level.removeFromToDestroy();
 
 		for (Entity elem : copy) {
 			this.level.pushedIn(elem.getx() + direction.getmoveX(),elem.gety() + direction.getmoveY(),elem, direction);

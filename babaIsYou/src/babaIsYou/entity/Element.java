@@ -15,7 +15,7 @@ public class Element extends Entity {
 		
 	}
 	/**
-	 * getteur ElemId
+	 * getter ElemId
 	 * @return
 	 */
 	public int getElemID() {
@@ -50,7 +50,11 @@ public class Element extends Entity {
 	 * function that return the List of all properties linked to this in Level
 	 * return the List of all properties linked to this in Level
 	 */
-	protected List<PropertyEnum> getPropertys() {		
+	protected List<PropertyEnum> getProperties() {		
 		return this.getLevel().getPropertyHashMap().get(this.idElement);
+	}
+	@Override
+	public boolean isYou() {
+		return this.getLevel().getPropertyHashMap().get(this.idElement).contains(PropertyEnum.You);
 	}
 }

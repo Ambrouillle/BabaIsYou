@@ -11,8 +11,14 @@ public abstract class Operator extends Text {
 		
 		
 	}
+	
+	
 	@Override
-	public void isRemove(int x, int y) {
+	public boolean isOperator() {
+		return true;
+	}
+	@Override
+	public void exiting(int x, int y) {
 //		this.getLevel().unSubcribeTo(this, x+1, y);
 //		this.getLevel().unSubcribeTo(this, x-1, y);
 //		this.getLevel().unSubcribeTo(this, x, y+1);
@@ -20,7 +26,7 @@ public abstract class Operator extends Text {
 	}
 	
 	@Override
-	public void enter(int x, int y) {
+	public void entering(int x, int y) {
 //		this.getLevel().subcribeTo(this, x+1, y);
 //		this.getLevel().subcribeTo(this, x-1, y);
 //		this.getLevel().subcribeTo(this, x, y+1);

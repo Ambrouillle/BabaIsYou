@@ -7,18 +7,18 @@ import babaIsYou.Level;
 import babaIsYou.entity.entityEnum.PropertyEnum;
 
 public abstract class Text extends Entity {
-	public boolean isUsed;
+	private boolean isUsed;
 
 	public Text(int imageID, int id,Level level) {
 		super(imageID, id, level);
-		isUsed = false;
+		setUsed(false);
 	}
 	@Override
 	public final boolean isPush() {
 		return true;
 	}
 	
-	public final boolean isStop() { // on peut tjrs pousser un text
+	public final boolean isStop() {
 		return false;
 	}
 	
@@ -28,11 +28,27 @@ public abstract class Text extends Entity {
 	}
 	
 	@Override
-	protected List<PropertyEnum> getPropertys() {
+	protected List<PropertyEnum> getProperties() {
 		List<PropertyEnum> list = new ArrayList<>();
 		list.add(PropertyEnum.Push);
 		
 		return list;
 	}
+	public boolean isOperator() {
+		return false;
+	}
+	public boolean isProperty() {
+		return false;
+	}
+	public boolean isUsed() {
+		return isUsed;
+	}
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
+	public boolean isYou() {
+		return false;
+	}
+	
 
 }
