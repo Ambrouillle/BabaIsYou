@@ -53,28 +53,6 @@ public class GameArea {
             
             
             return turnResult;
-            
-//            for(int elemId: lvl.getElemnwithProp(PropertyEnum.You)) {
-//            	list.addAll(lvl.getFactory().getElementHashMap().get(elemId));
-//            }
-//
-//            for(Entity en : list) {
-//            	
-//                ev = lvl.moove(en, dir);
-//                if (ev == EventBabaGame.Defeat){
-//                	//lvl.mooveProp(factory, PropertyEnum.You, dir);
-//                	return EventBabaGame.Defeat;
-//                }
-//                if(ev== EventBabaGame.Win) {
-//                	return EventBabaGame.Win;
-//                }
-//            }
-//
-//            if (lvl.toDestroy != null) {
-//                    lvl.removeFromToDestroy(factory);
-//            }
-//            return lvl.isLost(factory) == EventBabaGame.Good ? ev : EventBabaGame.Defeat;
-           
         }
         return EventBabaGame.Good;
     }
