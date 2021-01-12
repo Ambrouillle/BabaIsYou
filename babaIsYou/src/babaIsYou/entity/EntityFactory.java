@@ -67,4 +67,3 @@ public class EntityFactory{
 		this.elementHashMap = elementHashMap;
 	}
 }
-
