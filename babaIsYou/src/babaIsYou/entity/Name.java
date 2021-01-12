@@ -32,17 +32,26 @@ public class Name extends Text {
 	 * @param enter
 	 */
 	public void notifyMe(int x, int y, Entity text, boolean enter) {
-		System.out.println("x , y = "+x+" "+y + " " + text + " "+enter);	
+		notifyMe(x, y, text, enter, false);
+	}
+	
+	
+	private void notifyMe(int x, int y, Entity text, boolean enter, boolean forceRemove) {
+		System.out.print("x , y = "+x+" "+y + " " + text + " "+enter);	
 		int placement;
 		Entity[] lign;
 		if(this.getx()==x) {
 			lign = memory[0];
-			placement = y - this.gety() -1; 
+			placement = y - this.gety() -1;  
+			System.out.print("0");
+			
 		}
 		else {
 			lign = memory[1];
 			placement = x - this.getx() -1; 
+			System.out.print("1");
 		}
+		System.out.println(" " + placement );
 		
 		if(enter) {
 			lign[placement]= text;
@@ -53,59 +62,23 @@ public class Name extends Text {
 		}
 		else {
 
-			if(lign[0] != null && lign[1] != null && lign[0].isOperator() && lign[1].isProperty() && lign[placement] == text) {
-				
-				
-				this.getLevel().removePropInMap(((Property)lign[1]).getPropertyEnum(), this.linkId);				;//retirer prop
-				System.out.println("supp de prop " + this.linkId);
+			if(lign[placement] == text || forceRemove) {
+				if(lign[0] != null && lign[1] != null && lign[0].isOperator() && lign[1].isProperty()) {
+					
+					
+					this.getLevel().removePropInMap(((Property)lign[1]).getPropertyEnum(), this.linkId);				;//retirer prop
+					System.out.println("supp de prop " + this.linkId);
+				}
+				lign[placement]= null;
 			}
-			lign[placement]= null;
 
 		}
-		
-		
-		
-//		
-//		if(enter) {
-//			System.out.println("if");
-//			for(Entity entity : this.getLevel().getPlateau()[this.getx()+1][this.gety()].getContent() ) {
-//				System.out.println("elem : "+ entity);
-//				if(entity.isOperator()) {
-//						for(Entity entity2 : this.getLevel().getPlateau()[this.getx()+2][this.gety()].getContent()) {
-//							if(entity.isProperty()) {
-//									this.getLevel().addPropInMap(((Property)entity2).getPropertyEnum() , this.objectId);
-//									//add the new property in the Level
-//									System.out.println("notify me "+((Property)entity2).getPropertyEnum() + this.objectId);
-//								}
-//								
-//						
-//					}
-//				}
-//			}
-//			System.out.println("fin prem for");
-//		}
-//			
-//		else {
-//			System.out.println("else");
-//			/*
-//			for(Entity entity : this.getLevel().getPlateau()[this.getx()][this.gety()+1].getContent() ) {
-//			if(entity.isText()) {
-//				if(entity.isOperator()) {
-//					if(text.isProperty()) {
-//						this.getLevel().removePropInMap((Property)text, this.objectId);						
-//						//remove the prop from Level
-//						
-//					}
-//				}
-//			}
-//		}*/
-//		}
 	}
 	
 	@Override
 	public void exiting(int x, int y) {
-		notifyMe(x+1, y, memory[0][0], false);
-		notifyMe(x, y+1, memory[1][0], false);
+		notifyMe(x+1, y, memory[0][0], false, true);
+		notifyMe(x, y+1, memory[1][0], false, true);
 		memory = new Entity[2][2];
 		this.getLevel().unSubscribeTo(this,x,y+1);
 		this.getLevel().unSubscribeTo(this,x,y+2);
@@ -122,27 +95,6 @@ public class Name extends Text {
 		this.getLevel().subscribeTo(this,x+1,y);
 		this.getLevel().subscribeTo(this,x+2,y);
 		}
-//	@Override
-//	public void updateProp() {
-//		for(Entity entity : this.getLevel().plateau[this.getx()][this.gety()+1].getContent() ) {
-//			if(entity.isText()) {
-//				if(entity.isOperator()) {
-//					for(Entity entity2 : this.getLevel().plateau[this.getx()][this.gety()+2].getContent()) {
-//						if(entity.isText()) {
-//							if(entity.isProperty()) {
-//								this.getLevel().addPropInMap((PropertyEnum.entity2, 2);
-//							}
-//								//add property in this.level.
-//								//	HashMap<Integer,ArrayList<PropertyEnum>> propertyHashMap
-//								//addPropInMap(entity2, this.getIdElem( ) 
-//							}
-//					}
-//				}
-//			}
-//		}
-//		//if(this.getLevel().plateau[x][y+1].getContent().isText())
-//	//check if  there is a line?
-//	}
 	@Override
 	public boolean isName() {
 		return true;

@@ -43,8 +43,6 @@ public class GameArea {
         DirectionEnum dir;
 
         if (List.of("UP","DOWN","LEFT","RIGHT").contains(event.getKey().name())) {
-
-//            ArrayList<Element> list = new ArrayList<>();
             dir = DirectionEnum.valueOf(event.getKey().name());
             
             EventBabaGame turnResult = lvl.mooveProp(factory, PropertyEnum.You, dir);
@@ -53,27 +51,6 @@ public class GameArea {
             
             
             return turnResult;
-            
-//            for(int elemId: lvl.getElemnwithProp(PropertyEnum.You)) {
-//            	list.addAll(lvl.getFactory().getElementHashMap().get(elemId));
-//            }
-//
-//            for(Entity en : list) {
-//            	
-//                ev = lvl.moove(en, dir);
-//                if (ev == EventBabaGame.Defeat){
-//                	//lvl.mooveProp(factory, PropertyEnum.You, dir);
-//                	return EventBabaGame.Defeat;
-//                }
-//                if(ev== EventBabaGame.Win) {
-//                	return EventBabaGame.Win;
-//                }
-//            }
-//
-//            if (lvl.toDestroy != null) {
-//                    lvl.removeFromToDestroy(factory);
-//            }
-//            return lvl.isLost(factory) == EventBabaGame.Good ? ev : EventBabaGame.Defeat;
            
         }
         return EventBabaGame.Good;
@@ -90,18 +67,6 @@ public class GameArea {
     public int run(int id){
         int returnVal;
         lvl = new Level(id); // creation lvl
-        System.out.println(lvl.getPropertyHashMap());
-        
-//        lvl.addPropInMap(PropertyEnum.You, ElementEnum.Baba.getElemID());
-//        
-//        lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
-        lvl.addPropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
-        lvl.removePropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
-//        lvl.addPropInMap(PropertyEnum.Win,ElementEnum.Flag.getElemID());
-//        lvl.addPropInMap(PropertyEnum.Hot,ElementEnum.Lava.getElemID());
-//        lvl.addPropInMap(PropertyEnum.Melt,ElementEnum.Baba.getElemID());
-//        lvl.addPropInMap(PropertyEnum.Stop,ElementEnum.Wall.getElemID());
-        
         EventBabaGame ev;
 
         setSize();

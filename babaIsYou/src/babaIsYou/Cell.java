@@ -142,15 +142,14 @@ public class Cell {
 	public boolean enter(Entity entity, DirectionEnum direction) {
 		if(!this.canEnter(entity, direction))
 			return false;
-		List<Entity> copy =  getPushable();
-		this.level.removeEntityInCell(entity); 
-		this.level.addEntityInCell(entity,x,y);			
+		List<Entity> copy =  getPushable();		
 
 		for (Entity elem : copy) {
 			this.level.pushedIn(elem.getx() + direction.getmoveX(),elem.gety() + direction.getmoveY(),elem, direction);
 						
 		}
-		//notifier liste listlllener
+		this.level.removeEntityInCell(entity); 
+		this.level.addEntityInCell(entity,x,y);	
 		
 		return true;
 		
@@ -166,9 +165,6 @@ public class Cell {
 		if(this.isStop())
 			return false;
 		List<Entity> copy =  getPushable();
-		this.level.removeEntityInCell(entity);
-		this.level.addEntityInCell(entity,x,y);
-		this.level.atEnterInCell(entity,x,y,entity.getEntityId());
 //		this.level.removeFromToDestroy();
 
 		for (Entity elem : copy) {
@@ -176,6 +172,10 @@ public class Cell {
 			
 			
 		}
+
+		this.level.removeEntityInCell(entity);
+		this.level.addEntityInCell(entity,x,y);
+		this.level.atEnterInCell(entity,x,y,entity.getEntityId());
 			
 		return true;
 	}

@@ -114,11 +114,6 @@ public abstract class Entity {
 		return EventBabaGame.Good;
 	}
 	protected abstract List<PropertyEnum> getProperties();
-//	public abstract boolean isMelt();
-//	public abstract boolean isHot();
-//	public abstract boolean isSink();
-//	public abstract boolean isDefeat();
-//	public abstract boolean isWin();
 	
 	public abstract boolean isYou();
 	public abstract boolean isPush();

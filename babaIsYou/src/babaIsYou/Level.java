@@ -272,42 +272,6 @@ public class Level {
 		}
 		toDestroy.clear();
 	}
-	/*public void loadLevel(int levelNumber, EntityFactory factory){
-		try {
-			String row;
-			String filepath = "Ressources" + File.separator + levelNumber + ".csv";
-			BufferedReader csvReader = new BufferedReader(new FileReader(filepath));
-			row = csvReader.readLine();
-			String[] data = row.split(",");
-			this.x = atoi(data[0]);
-			this.y = atoi(data[1]);
-			plateau = new Cell[this.x][this.y];
-			for(int i = 0 ; i < x ; i++) {
-				for(int j = 0 ; j < y ; j++) {
-					getPlateau()[i][j] = new Cell(this,i,j);
-				}
-			}
-			propertyHashMap = new HashMap<>() ;
-			while((row = csvReader.readLine()) != null){
-				data = row.split(",");
-				switch (atoi(data[0])) {
-//Element
-					case 1 -> this.addEntityInCell(factory.create(ElementEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
-//Property
-					case 2 -> this.addEntityInCell(factory.create(PropertyEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
-//Name
-					case 3 -> this.addEntityInCell(factory.create(NameEnum.valueOf(data[1])), atoi(data[2]), atoi(data[3]));
-//Not Working Operator
-//					case 4 -> factory.create(OperatorEnum.valueOf(data[1]));
-				}
-			}
-		}
-		catch(IOException ex){
-			System.err.println("An exception occured");
-			ex.printStackTrace();
-		}
-	}
-	*/
 	public void spawnEntity(EntityFactory factory,String[] data) throws Exception {
 		switch (atoi(data[0])){
 			case 1://Element
@@ -373,15 +337,6 @@ public class Level {
 	}
 
 	public EventBabaGame isLost(EntityFactory factory){
-//		ArrayList<Element> list =new ArrayList<>();
-//		for (int idElem  :getElemnwithProp(PropertyEnum.You)) {
-//			list.addAll(factory.getElementHashMap().get(idElem));
-//		}
-//
-//		if (list.isEmpty()){
-//			return EventBabaGame.Defeat;
-//		}
-//		return EventBabaGame.Good;
 		int count;
 		for (int idElem  :getElemnwithProp(PropertyEnum.You)) {
 			if(factory.getElementHashMap().get(idElem) != null && factory.getElementHashMap().get(idElem).size() > 0)
@@ -393,8 +348,6 @@ public class Level {
 	}
 
 	public EventBabaGame atEnterInCell(Entity entityEntering,int x, int y,int id) {
-		//check what happen when entity will go to the Cell x,y
-		//if win
 		if(testOutOfBound(x,y)){
 			return EventBabaGame.Stop;
 		}
@@ -437,12 +390,12 @@ public class Level {
 	public Cell[][] getPlateau() {
 		return plateau;
 	}
-	public void OperatorInteract(Operator op){
-        OperatorAux(op,1,0);
-        OperatorAux(op,0,1);
+	public void operatorInteract(Operator op){
+        operatorAux(op,1,0);
+        operatorAux(op,0,1);
     }
     
-    private void OperatorAux(Operator op,int x,int y){
+    private void operatorAux(Operator op,int x,int y){
         if (!testOutOfBound(op.getx()-x, op.gety()-y)){
             for(Entity e : this.plateau[op.getx()-x][op.gety()-y].getContent()){
                 if (e.getClass() == Name.class){
