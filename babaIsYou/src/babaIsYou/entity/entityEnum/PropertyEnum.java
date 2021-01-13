@@ -2,7 +2,7 @@ package babaIsYou.entity.entityEnum;
 
 public enum PropertyEnum {
 	You(300,300),Win(301,301),Stop(302,302),Push(303,303),Melt(304,304),
-	Hot(305,305),Defeat(306,306),Sink(307,307);
+	Hot(305,305),Defeat(306,306),Sink(307,307),Explode(308,308),Detonate(309,309);
 	
 	private final int imageID;
 	private final int ElemID;

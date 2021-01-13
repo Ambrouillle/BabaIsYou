@@ -6,8 +6,7 @@ import babaIsYou.Level;
 import babaIsYou.entity.entityEnum.PropertyEnum;
 
 public class Element extends Entity {
-	/*en plus du x,y et de l'id image . un Element contient le level(map) et un id elem( savoir si c'est un mur ou un rock)
-	 * creer a partir de l'enum*/
+	
 	private final int idElement;
 	
 	public Element(int imageID,int id, int idElement,Level level) {
@@ -15,20 +14,30 @@ public class Element extends Entity {
 		this.idElement = idElement;
 		
 	}
-		
+	/**
+	 * getter ElemId
+	 * @return
+	 */
 	public int getElemID() {
         return this.idElement;
     }
 	
-	/*Pour voir si Element est pushable, il faut verifier si dans la map il y a la propzerty push associé a Elemnt.idElement*/
-	@Override
+	/**
+	 * check if this is linked to the Property PUSH in level
+	 * return true if is linked
+	 * 		  false if not
+	 */
 	public boolean isPush() {
 		if( this.getLevel().getPropertyHashMap().containsKey(this.idElement)) {
 			return this.getLevel().getPropertyHashMap().get(this.idElement).contains(PropertyEnum.Push);
 		}
 		return false;
 	}
-	
+	/**
+	 * check if this is linked to the Property STOP in level
+	 * return true if is linked
+	 * 		  false if not
+	 */
 	public boolean isStop() {
 		if( getLevel().getPropertyHashMap().containsKey(this.idElement)) {
 			return getLevel().getPropertyHashMap().get(this.idElement).contains(PropertyEnum.Stop);
@@ -37,8 +46,15 @@ public class Element extends Entity {
 	}
 
 	@Override
-	protected List<PropertyEnum> getPropertys() {
-		
+	/**
+	 * function that return the List of all properties linked to this in Level
+	 * return the List of all properties linked to this in Level
+	 */
+	protected List<PropertyEnum> getProperties() {		
 		return this.getLevel().getPropertyHashMap().get(this.idElement);
+	}
+	@Override
+	public boolean isYou() {
+		return this.getLevel().getPropertyHashMap().get(this.idElement).contains(PropertyEnum.You);
 	}
 }

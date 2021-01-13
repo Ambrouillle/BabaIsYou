@@ -1,11 +1,7 @@
 package babaIsYou;
 
-import babaIsYou.*;
-import babaIsYou.entity.Element;
-import babaIsYou.entity.Entity;
 import babaIsYou.entity.EntityFactory;
 import babaIsYou.entity.entityEnum.DirectionEnum;
-import babaIsYou.entity.entityEnum.ElementEnum;
 import babaIsYou.entity.entityEnum.EventBabaGame;
 import babaIsYou.entity.entityEnum.PropertyEnum;
 import fr.umlv.zen5.*;
@@ -14,22 +10,22 @@ import fr.umlv.zen5.ApplicationContext;
 import fr.umlv.zen5.ScreenInfo;
 import fr.umlv.zen5.Event.Action;
 
-import java.awt.geom.Rectangle2D;
-import java.awt.Color;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 public class GameArea {
-    ApplicationContext context;
-    float Width;
-    float Height;
-    Level lvl;
-    int lvlx;
-    int lvly;
-    int boardOriginx;
-    int boardOriginy;
-    Visual.Area area;
+    private final ApplicationContext context;
+    private final float Width;
+    private final float Height;
+    private Level lvl;
+    private int boardOriginx;
+    private int boardOriginy;
+    private Visual.Area area;
 
+    /**
+     * GameArea constructor.
+     * @param context Zen5 Application reference.
+     */
     GameArea(ApplicationContext context){
         this.context = context;
         ScreenInfo info = context.getScreenInfo();
@@ -37,60 +33,49 @@ public class GameArea {
         this.Height = info.getHeight();
 
     }
-    EventBabaGame checkMovement(Event event, EntityFactory factory){
-        EventBabaGame ev;
-        ev = EventBabaGame.Good;
+
+    /**
+     * Check if user input leads to movement if so executes it.
+     * @param event Keyboard event from Zen5.
+     * @param factory Game level factory.
+     * @return EventBabaGame that correspond to the game state.
+     */
+    EventBabaGame checkMovement(Event event, EntityFactory factory) throws IOException{
         DirectionEnum dir;
 
         if (List.of("UP","DOWN","LEFT","RIGHT").contains(event.getKey().name())) {
-
-            ArrayList<Element> list = new ArrayList<>();
-        	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Baba.getElemID()));
-        	System.out.println(lvl.getPropertyHashMap().get(ElementEnum.Lava.getElemID()));
-        	System.out.println(lvl.factory.elementHashMap.get(ElementEnum.Baba.getElemID()).size() );
             dir = DirectionEnum.valueOf(event.getKey().name());
-            for(int elemId: lvl.getElemnwithProp(PropertyEnum.You)) {
-            	list.addAll(lvl.factory.elementHashMap.get(elemId));
-            }
-
-            for(Entity en : list) {
-            	
-                ev = lvl.moove(en, dir);
-                if (ev == EventBabaGame.Defeat){
-                	lvl.mooveProp(factory, PropertyEnum.You, dir);
-                	return EventBabaGame.Defeat;
-                }
-                if(ev== EventBabaGame.Win) {
-                	return EventBabaGame.Win;
-                }
-            }
-
-            if (lvl.toDestroy != null) {
-                    lvl.removeFromToDestroy(factory);
-            }
-            return lvl.isLost(factory) == EventBabaGame.Good ? ev : EventBabaGame.Defeat;
+            
+            EventBabaGame turnResult = lvl.moveProp(factory, PropertyEnum.You, dir);
+            
+            lvl.removeFromToDestroy();
+            
+            
+            return turnResult;
+           
         }
         return EventBabaGame.Good;
     }
 
+    /**
+     * Sets level size.
+     */
     public void setSize(){
-        this.lvly = lvl.plateau.length ;
-        this.lvlx = lvl.plateau[0].length;
-        area = new Visual.Area(this.Height/lvlx, this.Width/lvly);
-        this.boardOriginx = (int)(this.Width / 2) - (area.imagesSize * lvly/2);
-        this.boardOriginy = (int)(this.Height / 2) - (area.imagesSize * lvlx/2);
+        int lvly = lvl.getPlateau().length;
+        int lvlx = lvl.getPlateau()[0].length;
+        area = new Visual.Area(this.Height/ lvlx, this.Width/ lvly);
+        this.boardOriginx = (int)(this.Width / 2) - (area.imagesSize * lvly /2);
+        this.boardOriginy = (int)(this.Height / 2) - (area.imagesSize * lvlx /2);
     }
 
-    public int run(int id){
+    /**
+     * Run the games loop
+     * @param id Actual Level id.
+     * @return Returns 1 if level is lost, 2 if it is won.
+     */
+    public int run(int id) throws IOException{
         int returnVal;
         lvl = new Level(id); // creation lvl
-        lvl.addPropInMap(PropertyEnum.You, ElementEnum.Baba.getElemID());
-        lvl.addPropInMap(PropertyEnum.Push, ElementEnum.Rock.getElemID());
-        lvl.addPropInMap(PropertyEnum.Sink,ElementEnum.Water.getElemID());
-        lvl.addPropInMap(PropertyEnum.Win,ElementEnum.Flag.getElemID());
-        lvl.addPropInMap(PropertyEnum.Hot,ElementEnum.Lava.getElemID());
-        lvl.addPropInMap(PropertyEnum.Melt,ElementEnum.Baba.getElemID());
-        lvl.addPropInMap(PropertyEnum.Stop,ElementEnum.Wall.getElemID());
         EventBabaGame ev;
 
         setSize();
@@ -108,8 +93,8 @@ public class GameArea {
             }
             if (ev != EventBabaGame.Defeat && ev != EventBabaGame.Win) {
                 if (action == Action.KEY_PRESSED) {
-                    ev = checkMovement(event, lvl.factory);
-                    if (lvl.isLost(lvl.factory) == EventBabaGame.Defeat) {
+                    ev = checkMovement(event, lvl.getFactory());
+                    if (lvl.isLost(lvl.getFactory()) == EventBabaGame.Defeat) {
                         ev = EventBabaGame.Defeat;
                     }
                     area.RefreshScreen(context, (int) this.Width, (int) this.Height, lvl, boardOriginx, boardOriginy);

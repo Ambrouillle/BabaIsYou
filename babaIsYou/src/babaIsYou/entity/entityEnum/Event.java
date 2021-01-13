@@ -10,5 +10,13 @@ public enum Event {
 	Event(int idEvent) {
 		this.idEvent = idEvent;
 	}
+	
+	/**
+	 * Getter for idEvent
+	 * @return this.idEvent
+	 */
+	public int getIdEvent() {
+		return idEvent;
+	}
 
 }
