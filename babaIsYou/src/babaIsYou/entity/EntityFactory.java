@@ -1,4 +1,5 @@
 package babaIsYou.entity;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +28,14 @@ public class EntityFactory{
 		return ret;
 	}
 	
-	public Operator create(OperatorEnum op) throws Exception {
+	public Operator create(OperatorEnum op) throws IOException {
 		switch(op) {
 		case Is:
 			Operator ret = new OperatorIs(op.getimageID(),idEntity,op.getElemID(),level);
 			idEntity += 1;
 			return ret;
 		default:
-			throw new RuntimeException("Operator not Recognized");
+			throw new IOException("Operator not Recognized");
 		}
 		
 	}

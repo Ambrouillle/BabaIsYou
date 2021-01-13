@@ -74,10 +74,11 @@ public class Level {
 	 * @param entity
 	 * @param x
 	 * @param y
+	 * @throws IOException 
 	 */
-	public void addEntityInCell(Entity entity,int x, int y) {
+	public void addEntityInCell(Entity entity,int x, int y) throws IOException {
 		if(testOutOfBound(x, y))
-			throw new RuntimeException("element placed outside of level");
+			throw new IOException("element placed outside of level");
 		entity.setx(x);
 		entity.sety(y);
 		getPlateau()[x][y].add(entity);//add
@@ -130,8 +131,9 @@ public class Level {
 	 * @param entity
 	 * @param direction
 	 * @return
+	 * @throws IOException 
 	 */
-	public boolean pushedIn(int x,int y,Entity entity, DirectionEnum direction) {
+	public boolean pushedIn(int x,int y,Entity entity, DirectionEnum direction) throws IOException {
 
 		if(testOutOfBound(x, y))
 			return false;
@@ -180,8 +182,9 @@ public class Level {
 	 * function that moove the Entity entity in the Direction
 	 * @param entity
 	 * @param direction
+	 * @throws IOException 
 	 */
-	public EventBabaGame moove(Entity entity, DirectionEnum direction) {
+	public EventBabaGame moove(Entity entity, DirectionEnum direction) throws IOException {
 		int x = entity.getx()+direction.getmoveX();
 		int y = entity.gety()+direction.getmoveY();
 		if(testOutOfBound(x, y))
@@ -213,8 +216,9 @@ public class Level {
 	 * @param direction
 	 * @return  true if there is at least one element according to the prop
 	 * 			false if there is no element with the prop
+	 * @throws IOException 
 	 */
-	public EventBabaGame mooveProp(EntityFactory factory,PropertyEnum prop,DirectionEnum direction) {
+	public EventBabaGame mooveProp(EntityFactory factory,PropertyEnum prop,DirectionEnum direction) throws IOException {
 		ArrayList<Element> list =new ArrayList<>();
 		for (int idElem  :getElemnwithProp(prop)) {
 			list.addAll(factory.getElementHashMap().get(idElem));

@@ -1,5 +1,6 @@
 package babaIsYou;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,8 +139,9 @@ public class Cell {
 	 * @param direction
 	 * @return true if can
 	 * 		   false if not
+	 * @throws IOException 
 	 */
-	public boolean enter(Entity entity, DirectionEnum direction) {
+	public boolean enter(Entity entity, DirectionEnum direction) throws IOException {
 		if(!this.canEnter(entity, direction))
 			return false;
 		List<Entity> copy =  getPushable();		
@@ -160,8 +162,9 @@ public class Cell {
 	 * @param direction
 	 * @return true if the entity is pushable
 	 * 		   false if not
+	 * @throws IOException 
 	 */
-	public boolean pushedIn(Entity entity, DirectionEnum direction) {
+	public boolean pushedIn(Entity entity, DirectionEnum direction) throws IOException {
 		if(this.isStop())
 			return false;
 		List<Entity> copy =  getPushable();

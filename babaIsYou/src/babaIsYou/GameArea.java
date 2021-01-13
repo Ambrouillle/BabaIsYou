@@ -15,6 +15,7 @@ import fr.umlv.zen5.ScreenInfo;
 import fr.umlv.zen5.Event.Action;
 
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class GameArea {
         this.Height = info.getHeight();
 
     }
-    EventBabaGame checkMovement(Event event, EntityFactory factory){
+    EventBabaGame checkMovement(Event event, EntityFactory factory) throws IOException{
         EventBabaGame ev;
         ev = EventBabaGame.Good;
         DirectionEnum dir;
@@ -64,7 +65,7 @@ public class GameArea {
         this.boardOriginy = (int)(this.Height / 2) - (area.imagesSize * lvlx/2);
     }
 
-    public int run(int id){
+    public int run(int id) throws IOException{
         int returnVal;
         lvl = new Level(id); // creation lvl
         EventBabaGame ev;
