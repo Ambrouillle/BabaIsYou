@@ -50,7 +50,7 @@ public class Main {
         Application.run(Color.BLACK, context -> {
             GameArea game = new GameArea(context);
             try {
-				game.run(finalPath,1, commands);
+				game.run(finalPath,6, commands);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
