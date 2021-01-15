@@ -1,7 +1,8 @@
 package babaIsYou.entity.entityEnum;
 
 public enum OperatorEnum {
-	Is(200,200) ;//ajouter plus tard on , has,and
+	Is(200,200);
+	
 	private final int imageID;
 	private final int ElemID;
 	
@@ -10,11 +11,18 @@ public enum OperatorEnum {
         this.ElemID = idElem;  
              
    }
-
+	/**
+	 * Getter imageId
+	 * @return this.imageId
+	 */
 	public int getimageID() {
 		return imageID;
 	}
 
+	/**
+	 * Getter ElemID
+	 * @return this.ElemID
+	 */
 	public int getElemID() {
 		return ElemID;
 	}
