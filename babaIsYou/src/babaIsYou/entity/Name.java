@@ -37,27 +37,22 @@ public class Name extends Text {
 	
 	
 	private void notifyMe(int x, int y, Entity text, boolean enter, boolean forceRemove) {
-		System.out.print("x , y = "+x+" "+y + " " + text + " "+enter);	
 		int placement;
 		Entity[] lign;
 		if(this.getx()==x) {
 			lign = memory[0];
-			placement = y - this.gety() -1;  
-			System.out.print("0");
+			placement = y - this.gety() -1;
 			
 		}
 		else {
 			lign = memory[1];
-			placement = x - this.getx() -1; 
-			System.out.print("1");
+			placement = x - this.getx() -1;
 		}
-		System.out.println(" " + placement );
 		
 		if(enter) {
 			lign[placement]= text;
 			if(lign[0] != null && lign[1] != null && lign[0].isOperator() && lign[1].isProperty()) {
 				this.getLevel().addPropInMap(((Property)lign[1]).getPropertyEnum() , this.linkId);//ajout prop
-				System.out.println("ajout de prop " + this.linkId);
 			}
 		}
 		else {
@@ -66,8 +61,7 @@ public class Name extends Text {
 				if(lign[0] != null && lign[1] != null && lign[0].isOperator() && lign[1].isProperty()) {
 					
 					
-					this.getLevel().removePropInMap(((Property)lign[1]).getPropertyEnum(), this.linkId);				;//retirer prop
-					System.out.println("supp de prop " + this.linkId);
+					this.getLevel().removePropInMap(((Property)lign[1]).getPropertyEnum(), this.linkId);
 				}
 				lign[placement]= null;
 			}

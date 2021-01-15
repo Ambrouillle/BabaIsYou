@@ -165,6 +165,12 @@ public class Level {
 		return EventBabaGame.Stop;
 	}
 
+
+	/**
+	 * Remove entities in cell x y.
+	 * @param x X-axis coordinate of the desired cell.
+	 * @param y Y-axis coordinate of the desired cell.
+	 */
 	public void clearCell(int x, int y){
 		if(!testOutOfBound(x,y)) {
 			for (Entity e : this.plateau[x][y].getContent()) {
@@ -215,6 +221,9 @@ public class Level {
 		
 	}
 
+	/**
+	 *Trigger for detonate property.
+	 */
 	public void detonate(){
 		ArrayList<Element> list =new ArrayList<>();
 		for (int idElem  : getElemWithProp(PropertyEnum.Explode)) {
@@ -352,7 +361,7 @@ public class Level {
 			}
 		}
 		catch(IOException ex){
-			System.err.println("An exception occurred Level Undefined");
+			System.out.println("No levels left");
 			System.exit(3);
 		} catch (Exception e) {
 			e.printStackTrace();
