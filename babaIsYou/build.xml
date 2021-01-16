@@ -1,0 +1,63 @@
+<project name="BabaIsYou" default="all" basedir=".">
+    <!-- Definition des proprietes du projet --> 
+    <property name="src"        value="${basedir}/src"/>
+    <property name="docs"       value="${basedir}/docs/doc"/>
+    <property name="bin"        value="${basedir}/bin"/>
+    <property name="lib"        value="${basedir}"/>
+    <property name="MANIFEST"   value="${basedir}/META-INF/MANIFEST.MF"/>
+
+    <!-- Definition du classpath du projet -->
+    <path id="projet.classpath">
+        <fileset dir="${lib}">
+            <include name="*.jar"/>
+        </fileset>
+    <pathelement location="${bin}"/>
+    </path>
+
+    
+    <!-- Initialisation -->
+    <target name="init">
+        <mkdir dir="${bin}"/>
+        <mkdir dir="${docs}"/>
+    </target>
+
+    <!-- Compilation -->
+    <target name="all" depends="jar, javadoc" description="Generation complete">
+        <echo message="Generation complete."/>
+    </target>
+
+    <!-- Creation de la javadoc -->
+    <target name="javadoc" depends="compile" description="Javadoc du projet">
+        <javadoc destdir="${docs}" author="true" version="true" use="true" 
+            package="true" >
+            <arg line="--enable-preview --release 15"/>
+            <fileset dir="${src}" includes="**/*.java"/>
+            <classpath refid="projet.classpath"/>
+        </javadoc>
+    </target>
+
+    <!-- Compilation des classes du projet -->
+    <target name="compile" depends="init" description="Compilation des classes">
+        <javac srcdir="${src}"
+            destdir="${bin}"
+            includeantruntime="false"
+            debug="on"
+            optimize="off"
+            deprecation="on">
+            <compilerarg line="--enable-preview --release 15"/>
+            <classpath refid="projet.classpath"/>
+        </javac>
+    </target>
+
+    <!-- Compression en jar -->
+    <target name="jar" depends="compile" description="Compresse le .jar" >
+        <jar jarfile="${basedir}/baba.jar" basedir="${bin}" manifest="${MANIFEST}"/>
+    </target>
+
+    <!-- Nettoyage du projet -->
+    <target name="clean" description="Nettoie le projet">
+        <delete dir="${bin}"/>
+        <mkdir dir="${bin}"/>
+        <delete dir="${docs}"/>
+    </target>
+</project>
