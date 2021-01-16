@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: fr.umlv.projet.main.Main
-Class-Path: lib/zen5.jar
+Main-Class: babaIsYou.Main
+Class-Path: zen5.jar
