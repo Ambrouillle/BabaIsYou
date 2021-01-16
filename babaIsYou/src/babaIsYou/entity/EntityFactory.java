@@ -1,4 +1,5 @@
 package babaIsYou.entity;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,28 +12,30 @@ import babaIsYou.entity.entityEnum.PropertyEnum;
 
 
 public class EntityFactory{	
-	public Map<Integer,ArrayList<Element>> elementHashMap ; 	
+	private Map<Integer,ArrayList<Element>> elementHashMap ; 	
 	private final Level level;
 	private int idEntity;
+	
+	
 	public EntityFactory(Level level) {
 		idEntity = 0;
 		this.level = level;
-		elementHashMap = new HashMap<>() ;
+		setElementHashMap(new HashMap<>()) ;
 	}
 	public Name create(NameEnum name) {
-		Name ret = new Name(name.getimageID(),idEntity,name.getElemID(),level);
+		Name ret = new Name(name.getimageID(),idEntity,name.getElemID(),name.getLinkId(),level);
 		idEntity += 1;
 		return ret;
 	}
 	
-	public Operator create(OperatorEnum op) throws Exception {
+	public Operator create(OperatorEnum op) throws IOException {
 		switch(op) {
 		case Is:
 			Operator ret = new OperatorIs(op.getimageID(),idEntity,op.getElemID(),level);
 			idEntity += 1;
 			return ret;
 		default:
-			throw new RuntimeException("Operator not Recognized");
+			throw new IOException("Operator not Recognized");
 		}
 		
 	}
@@ -40,23 +43,28 @@ public class EntityFactory{
 		ArrayList<Element> list;
 		Element ret = new Element(el.getimageID(),this.idEntity,el.getElemID(),level);
 		idEntity += 1;
-		if(this.elementHashMap.containsKey(el.getElemID())) {
-			list = this.elementHashMap.get(el.getElemID());
+		if(this.getElementHashMap().containsKey(el.getElemID())) {
+			list = this.getElementHashMap().get(el.getElemID());
 			list.add(ret);
 		}
 		else {
 			list = new ArrayList<>();
 			list.add(ret);
 		}
-		elementHashMap.put(el.getElemID(),list );
+		getElementHashMap().put(el.getElemID(),list );
 		return ret;
 	}
 		
 		
 	public Property create(PropertyEnum prop) {
-		Property ret = new Property(prop.getimageID(),this.idEntity,prop.getElemID(),level);
+		Property ret = new Property(prop.getimageID(),this.idEntity,prop.getElemID(),level, prop);
 		idEntity += 1;
 		return ret;
 	}
+	public Map<Integer,ArrayList<Element>> getElementHashMap() {
+		return elementHashMap;
+	}
+	public void setElementHashMap(Map<Integer,ArrayList<Element>> elementHashMap) {
+		this.elementHashMap = elementHashMap;
+	}
 }
-
